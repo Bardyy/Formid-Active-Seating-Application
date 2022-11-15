@@ -34,16 +34,17 @@ public class BodyController : MonoBehaviour {
             { 0, 0, 0, 0, 0, 0, 0, -5, 0, 0, 5, 0 },
             { 0, 0, 0, 0, 0, 0, 10, -5, 0, 10, 5, 0 },
             { -10, 0, 0, 10, 0, 0, 10, -5, 0, 10, 5, 0 },
-            { 0, 0, 0, 0, 0, 0, 20, -20, 0, 10, 5, 0 },
-            { 0, 0, 20, 0, 0, 20, 20, -20, 0, 10, 5, 0 },
-            { 0, 0, 0, 0, 0, 0, 10, -5, 0, 20, 20, 0 },
-            { 0, 0, -20, 0, 0, -20, 10, -5, 0, 20, 20, 0 }
+            { 0, 0, 0, 0, 0, 0, 20, -20, -10, 10, 5, -5 },
+            { 0, 0, 20, 0, 0, 20, 20, -20, -10, 10, 5, -5 },
+            { 0, 0, 0, 0, 0, 0, 10, -5, 5, 20, 20, 10 },
+            { 0, 0, -20, 0, 0, -20, 10, -5, 5, 20, 20, 10 }
         };
     }
 
     void Update() {
+        // Test values
         if(Input.GetKeyDown(KeyCode.Z)) this.position += 1;
-        if(Input.GetKeyDown(KeyCode.X)) position -= 1;
+        if(Input.GetKeyDown(KeyCode.X)) this.position -= 1;
         
         if(this.position < 0) this.position = 0;
         if(this.position > 6) this.position = 6;
