@@ -8,13 +8,12 @@ public class CameraController : MonoBehaviour
     // - - - - Public variables
 
     public GameObject cameraPivotPoint;
-
-    public const float MAX_DISTANCE = 10.0f;
-    public const float MIN_DISTANCE = 1.0f;
+    public float speed = 50.0f;
 
     // - - - - Private variables
 
     private float _distance;
+    
 
     void Start()
     {
@@ -24,23 +23,18 @@ public class CameraController : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKey(KeyCode.A)) {
-            this.transform.RotateAround(this.cameraPivotPoint.transform.position, Vector3.up, 100 * Time.deltaTime);
+        RotateCamera();
+
+    }
+
+    void RotateCamera()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            this.transform.RotateAround(cameraPivotPoint.transform.position, Vector3.up, -Input.GetAxis("Mouse X") * speed);
+
+            this.transform.RotateAround(cameraPivotPoint.transform.position, this.transform.right, -Input.GetAxis("Mouse Y") * speed);
         }
-        if(Input.GetKey(KeyCode.D)) {
-            this.transform.RotateAround(this.cameraPivotPoint.transform.position, Vector3.up, -100 * Time.deltaTime);
-        }
 
-        // Vector3 direction = this.transform.position - this.cameraPivotPoint.transform.position;
-        // direction.Normalize();
-
-        // if(Input.GetKey(KeyCode.W)) {
-        //     this.transform.Translate(direction * 100 * Time.deltaTime);
-        // }
-        // if(Input.GetKey(KeyCode.S)) {
-        //     this.transform.Translate(direction * -100 * Time.deltaTime);
-        // }
-
-        this._distance = System.Math.Clamp(this._distance, MIN_DISTANCE, MAX_DISTANCE);
     }
 }
