@@ -47,7 +47,7 @@ public class BodyController : MonoBehaviour {
         if(Input.GetKeyDown(KeyCode.X)) this.position -= 1;
         
         if(this.position < 0) this.position = 0;
-        if(this.position > 6) this.position = 6;
+        if(this.position >= positions.Length) this.position = positions.Length-1;
         
 
         Vector3[] rotations = new Vector3[4];
