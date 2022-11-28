@@ -26,24 +26,19 @@ public class BodyController : MonoBehaviour {
         string config = streamReader.ReadToEnd();
         
         this.postures = JsonConvert.DeserializeObject<PostureList>(config);
-
-        // this.positions = new float[,] {
-        //     { 0, 0, 0, 0, 0, 0, 0, -5, 0, 0, 5, 0 },
-        //     { 0, 0, 0, 0, 0, 0, 10, -5, 0, 10, 5, 0 },
-        //     { -10, 0, 0, 10, 0, 0, 10, -5, 0, 10, 5, 0 },
-        //     { 0, 0, 0, 0, 0, 0, 20, -20, -10, 10, 5, -5 },
-        //     { 0, 0, 20, 0, 0, 20, 20, -20, -10, 10, 5, -5 },
-        //     { 0, 0, 0, 0, 0, 0, 10, -5, 5, 20, 20, 10 },
-        //     { 0, 0, -20, 0, 0, -20, 10, -5, 5, 20, 20, 10 }
-        // };
     }
 
+    // Update method for input handling
     void Update() {
         // Test values
         if(Input.GetKeyDown(KeyCode.Z)) this.position += 1;
         if(Input.GetKeyDown(KeyCode.X)) this.position -= 1;
         
         this.position = Mathf.Clamp(this.position, 0, this.postures.Size - 1);
+    }
+
+    // LateUpdate for auto-adjustments handled by engine
+    void LateUpdate() {
         var posture = this.postures.Postures[this.position];
 
         // Set the posture (Perform top to bottom by hierarchy to avoid artifacts)
