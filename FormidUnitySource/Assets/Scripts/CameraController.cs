@@ -2,43 +2,55 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour
-{
+public class CameraController : MonoBehaviour {
+
+    public const int LMB_CODE = 0;
+    public const float MAX_DIST = 20.0f;
+    public const float MIN_DIST = 2.0f;
 
     // - - - - Public variables
 
-    public GameObject cameraPivotPoint;
-    public float speed = 50.0f;
+    public GameObject pivotPoint;
+    public GameObject floor;
+    public float mouseSens = 10.0f;
+    public float distance = 3.0f;
 
     // - - - - Private variables
-
-    private float _distance;
     
+    private float _floorHeight = -Mathf.Infinity;
+    private float _ceilingHeight = 0;
+    private float _scrollSpeed = 0.5f;
 
-    void Start()
-    {
-        this._distance = (this.transform.position - this.cameraPivotPoint.transform.position).magnitude;
-        
+    void Start() {
+        if(this.floor != null) {
+            _floorHeight = this.floor.transform.position.y + this.floor.transform.localScale.y / 2.0f;
+        }
     }
 
-    void Update()
-    {
-        RotateCamera();
-        float fixedX = Mathf.Clamp(this.transform.eulerAngles.x, -30.0f, 30.0f);
-        this.transform.eulerAngles = new Vector3(fixedX, this.transform.eulerAngles.y, 0);
-        this.transform.LookAt(this.cameraPivotPoint.transform.position);
-    }
+    void Update() {
+        // Zooming in and out
+        if(Input.GetAxis("Mouse ScrollWheel") > 0.0f) distance -= _scrollSpeed;
+        else if(Input.GetAxis("Mouse ScrollWheel") < 0.0f) distance += _scrollSpeed;
+        distance = Mathf.Clamp(distance, MIN_DIST, MAX_DIST);
 
-    void RotateCamera()
-    {
-        if (Input.GetMouseButton(0))
-        {
-            this.transform.RotateAround(cameraPivotPoint.transform.position, Vector3.up, -Input.GetAxis("Mouse X") * speed);
-            float mouseChangeY = -Input.GetAxis("Mouse Y");
-            if (mouseChangeY < 0 && (mouseChangeY * speed) - this.transform.eulerAngles.x > -45 ) {
-                this.transform.RotateAround(cameraPivotPoint.transform.position, this.transform.right, mouseChangeY * speed);
-            }
+        // Holding left mouse button
+        if(Input.GetMouseButton(LMB_CODE)) {
+            this.transform.RotateAround(pivotPoint.transform.position, Vector3.up, Input.GetAxis("Mouse X") * mouseSens);
+            this.transform.RotateAround(pivotPoint.transform.position, this.transform.right, Input.GetAxis("Mouse Y") * mouseSens);
         }
 
+        // Set position relative to pivot
+        Vector3 displacement = this.transform.position - this.pivotPoint.transform.position;
+        displacement.Normalize();
+        displacement *= distance;
+        this.transform.position = this.pivotPoint.transform.position + displacement;
+
+        // Clamp Y-axis position between floor and ceiling
+        _ceilingHeight = distance - distance / 2.0f;
+        if(this.transform.position.y < _floorHeight) this.transform.position = new Vector3(this.transform.position.x, _floorHeight, this.transform.position.z);
+        if(this.transform.position.y > _ceilingHeight) this.transform.position = new Vector3(this.transform.position.x, _ceilingHeight, this.transform.position.z);
+
+        // Keep looking at pivot
+        this.transform.LookAt(this.pivotPoint.transform.position);
     }
 }
