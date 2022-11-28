@@ -1,0 +1,144 @@
+{
+    "Postures": [
+        {
+            "UpperLeftLeg": {
+                "X": 10, "Y": -5, "Z": 0
+            },
+            "UpperRightLeg": {
+                "X": 10, "Y": 5, "Z": 0
+            },
+            "LowerTorso": {
+                "X": 0, "Y": 0, "Z": 0
+            },
+            "UpperTorso": {
+                "X": 0, "Y": 0, "Z": 0
+            },
+            "Neck": {
+                "X": 0, "Y": 0, "Z": 0
+            },
+            "Chair": {
+                "X": 5, "Y": 0, "Z": 0
+            }
+        },
+        {
+            "UpperLeftLeg": {
+                "X": 10, "Y": -5, "Z": 0
+            },
+            "UpperRightLeg": {
+                "X": 10, "Y": 5, "Z": 0
+            },
+            "LowerTorso": {
+                "X": 0, "Y": 0, "Z": 0
+            },
+            "UpperTorso": {
+                "X": 0, "Y": 0, "Z": 0
+            },
+            "Neck": {
+                "X": 0, "Y": 0, "Z": 0
+            },
+            "Chair": {
+                "X": 10, "Y": 0, "Z": 0
+            }
+        },
+        {
+            "UpperLeftLeg": {
+                "X": 10, "Y": -5, "Z": 0
+            },
+            "UpperRightLeg": {
+                "X": 10, "Y": 5, "Z": 0
+            },
+            "LowerTorso": {
+                "X": -10, "Y": 0, "Z": 0
+            },
+            "UpperTorso": {
+                "X": 10, "Y": 0, "Z": 0
+            },
+            "Neck": {
+                "X": 0, "Y": 0, "Z": 0
+            },
+            "Chair": {
+                "X": 10, "Y": 0, "Z": 0
+            }
+        },
+        {
+            "UpperLeftLeg": {
+                "X": 10, "Y": -20, "Z": -10
+            },
+            "UpperRightLeg": {
+                "X": 5, "Y": 5, "Z": -5
+            },
+            "LowerTorso": {
+                "X": 0, "Y": 0, "Z": 0
+            },
+            "UpperTorso": {
+                "X": 0, "Y": 0, "Z": 0
+            },
+            "Neck": {
+                "X": 0, "Y": 0, "Z": 0
+            },
+            "Chair": {
+                "X": 5, "Y": 0, "Z": 10
+            }
+        },
+        {
+            "UpperLeftLeg": {
+                "X": 10, "Y": -20, "Z": -10
+            },
+            "UpperRightLeg": {
+                "X": 5, "Y": 5, "Z": -5
+            },
+            "LowerTorso": {
+                "X": 0, "Y": 0, "Z": 10
+            },
+            "UpperTorso": {
+                "X": 0, "Y": 0, "Z": 10
+            },
+            "Neck": {
+                "X": 0, "Y": 0, "Z": 10
+            },
+            "Chair": {
+                "X": 5, "Y": 0, "Z": 10
+            }
+        },
+        {
+            "UpperLeftLeg": {
+                "X": 5, "Y": -5, "Z": 5
+            },
+            "UpperRightLeg": {
+                "X": 10, "Y": 20, "Z": 10
+            },
+            "LowerTorso": {
+                "X": 0, "Y": 0, "Z": 0
+            },
+            "UpperTorso": {
+                "X": 0, "Y": 0, "Z": 0
+            },
+            "Neck": {
+                "X": 0, "Y": 0, "Z": 0
+            },
+            "Chair": {
+                "X": 5, "Y": 0, "Z": -10
+            }
+        },
+        {
+            "UpperLeftLeg": {
+                "X": 5, "Y": -5, "Z": 5
+            },
+            "UpperRightLeg": {
+                "X": 10, "Y": 20, "Z": 10
+            },
+            "LowerTorso": {
+                "X": 0, "Y": 0, "Z": -10
+            },
+            "UpperTorso": {
+                "X": 0, "Y": 0, "Z": -10
+            },
+            "Neck": {
+                "X": 0, "Y": 0, "Z": -10
+            },
+            "Chair": {
+                "X": 5, "Y": 0, "Z": -10
+            }
+        }
+    ]
+}
