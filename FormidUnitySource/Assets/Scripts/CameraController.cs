@@ -43,13 +43,13 @@ public class CameraController : MonoBehaviour {
         distance = Mathf.Clamp(distance, MIN_DIST, MAX_DIST);
 
         // Holding RIGHT mouse button to DRAG
-        if(Input.GetMouseButton(RIGHT_MOUSE_BUTTON)) {
+        if(Input.GetMouseButton(LEFT_MOUSE_BUTTON)) {
             this.transform.RotateAround(_pivotPoint.transform.position, Vector3.up, Input.GetAxis("Mouse X") * mouseSens);
             this.transform.RotateAround(_pivotPoint.transform.position, this.transform.right, -Input.GetAxis("Mouse Y") * mouseSens);
         }
 
         // Selecting new pivot point
-        if(Input.GetMouseButtonDown(LEFT_MOUSE_BUTTON)) {
+        if(Input.GetMouseButtonDown(RIGHT_MOUSE_BUTTON)) {
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if(Physics.Raycast(ray, out hit)) {
