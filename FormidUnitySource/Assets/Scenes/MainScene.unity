@@ -157,7 +157,7 @@ Transform:
   - {fileID: 1813194187}
   - {fileID: 4008976932673555319}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!135 &143010197
 SphereCollider:
@@ -232,8 +232,9 @@ GameObject:
   m_Component:
   - component: {fileID: 472788214}
   - component: {fileID: 472788213}
-  - component: {fileID: 472788212}
   - component: {fileID: 472788215}
+  - component: {fileID: 472788216}
+  - component: {fileID: 472788217}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -241,14 +242,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &472788212
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 472788211}
-  m_Enabled: 1
 --- !u!20 &472788213
 Camera:
   m_ObjectHideFlags: 0
@@ -258,7 +251,7 @@ Camera:
   m_GameObject: {fileID: 472788211}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 2
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0.43867922, g: 0.910833, b: 1, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -305,7 +298,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &472788215
 MonoBehaviour:
@@ -319,10 +312,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 024fc27c60bf62b439f1fc4b4eb48b0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultpivotPoint: {fileID: 143010195}
+  defaultpivotPoint: {fileID: 1221782573}
   floor: {fileID: 846727962}
   mouseSens: 10
   distance: 10
+--- !u!81 &472788216
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 472788211}
+  m_Enabled: 1
+--- !u!114 &472788217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 472788211}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e93f331f871558147ae688542b1c136a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  additionalCameraPrefab: {fileID: 3144171850921271318, guid: 02c590ccca98be041abc22337485d6a2, type: 3}
 --- !u!1 &846727962
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,7 +414,7 @@ Transform:
   m_GameObject: {fileID: 846727962}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -1.75, z: 0}
-  m_LocalScale: {x: 1000, y: 0.2, z: 1000}
+  m_LocalScale: {x: 5000, y: 0.2, z: 5000}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -543,6 +557,7 @@ MonoBehaviour:
   chair: {fileID: 143010195}
   configFilePath: config.json
   chairSerialPortName: COM5
+  debugMode: 0
 --- !u!135 &1221782575
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -614,12 +629,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1221782573}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1310931442
 GameObject:
@@ -1105,7 +1120,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 20.878, y: -101.334, z: -46.531}
 --- !u!1 &4008976932673263353 stripped
 GameObject:
@@ -1158,7 +1173,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5759310156092166656, guid: 2f33ef777bd86ac4e98c0f583d6e2f10, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -12
+      value: -13
       objectReference: {fileID: 0}
     - target: {fileID: 5759310156092166656, guid: 2f33ef777bd86ac4e98c0f583d6e2f10, type: 3}
       propertyPath: m_LocalPosition.z

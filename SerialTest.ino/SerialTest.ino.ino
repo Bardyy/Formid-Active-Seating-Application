@@ -22,7 +22,7 @@ void loop() {
   lastState = currentState;
 
   // Write posture value to serial port
-//  Serial.write(posture);
-  Serial.println(posture);
+  Serial.write(posture);
+//  Serial.println(posture);
   delay(20);
 }

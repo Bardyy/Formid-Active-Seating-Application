@@ -9,7 +9,6 @@ public class BodyController : MonoBehaviour {
     public const int CHAIR_INPUT_BAUD_RATE = 9600;
 
     // - - - - Public variables
-
     public GameObject lowerTorso;
     public GameObject upperTorso;
     public GameObject leftUpperLeg;
@@ -22,7 +21,6 @@ public class BodyController : MonoBehaviour {
     public bool debugMode = false;                      // Whether to use serial input or to use Z/X to change posture
 
     // - - - - Private variables
-
     private PostureList _postures;
     private PostureInputInterface _sInput;
     private int _position = 0;
