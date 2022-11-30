@@ -26,7 +26,7 @@ public class CameraAdder : MonoBehaviour {
     // ------------------------- Helper methods -------------------------
 
     // Get a new camera from original camera
-    void AddCamera() {
+    public void AddCamera() {
         if(this._additionalCameraList.Count >= MAX_ADDITONAL_CAMERAS) return;
 
         GameObject newCamera = Instantiate(additionalCameraPrefab) as GameObject;
@@ -39,7 +39,7 @@ public class CameraAdder : MonoBehaviour {
     }
 
     // Remove a camera from the end of the list
-    void RemoveCamera() {
+    public void RemoveCamera() {
         if(this._additionalCameraList.Count <= 0) return;
 
         // Remove the last camera
