@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEditor;
 using Newtonsoft.Json;
 
@@ -14,6 +15,10 @@ public class Recorder : MonoBehaviour {
     public BodyController postureControl;
     public GameObject recordingSignifierUI;
     public GameObject playbackSignifierUI;
+    public GameObject loadButton;
+    public GameObject saveButton;
+    public GameObject recordButton;
+    public GameObject playButton;
     
     // - - - - Private variables
     private RecorderState _state;
@@ -87,8 +92,14 @@ public class Recorder : MonoBehaviour {
 
     // Toggle Recording
     public void ToggleRecording() {
-        if(this._state == RecorderState.Standby) StartRecording();
-        else if(this._state == RecorderState.Recording) StopRecording();
+        if(this._state == RecorderState.Standby) {
+            StartRecording();
+            this.recordButton.GetComponentInChildren<Text>().text = "Stop";
+        }
+        else if(this._state == RecorderState.Recording) {
+            StopRecording();
+            this.recordButton.GetComponentInChildren<Text>().text = "Record";
+        }
     }
 
     // Toggle Playback
