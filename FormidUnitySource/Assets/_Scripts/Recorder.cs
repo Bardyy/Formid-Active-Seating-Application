@@ -1,6 +1,10 @@
+using System;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Newtonsoft.Json;
+
 
 public class Recorder : MonoBehaviour {
 
@@ -148,8 +152,12 @@ public class Recorder : MonoBehaviour {
     // Save recording to file
     public void SaveRecording() {
         // Only perform if in standby state
-        if(this._state == RecorderState.Standby) {
-
+        if(this._state == RecorderState.Standby && this._lastRecording != null) {
+            string output = JsonConvert.SerializeObject(this._lastRecording, Formatting.Indented);   
+            // Write the string array to a new file named "Recording.formid".
+            using (StreamWriter outputFile = new StreamWriter("Recording.formid"))
+                outputFile.WriteLine(output);
+        
         }
     }
 

@@ -68,3 +68,6 @@ FormidUnitySource/[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 # Temporary auto-generated Android Assets
 FormidUnitySource/[Aa]ssets/[Ss]treamingAssets/aa.meta
 FormidUnitySource/[Aa]ssets/[Ss]treamingAssets/aa/*
+
+# Ignore formid files
+*.formid
