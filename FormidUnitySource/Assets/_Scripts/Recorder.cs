@@ -174,7 +174,8 @@ public class Recorder : MonoBehaviour {
             if (path.Length != 0) {
                 StreamReader streamReader = new StreamReader(path);
                 string input = streamReader.ReadToEnd();
-                this._lastRecording = JsonConvert.DeserializeObject<Recording>(input);
+                Recording loadedRecording = JsonConvert.DeserializeObject<Recording>(input);
+                if(loadedRecording.Frames.Count > 0 && PromptOverwrite()) this._lastRecording = JsonConvert.DeserializeObject<Recording>(input);
             }
         }
     }
