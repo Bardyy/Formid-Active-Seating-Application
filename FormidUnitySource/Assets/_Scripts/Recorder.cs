@@ -186,7 +186,7 @@ public class Recorder : MonoBehaviour {
         if(this._state == RecorderState.Standby && this._lastRecording != null) {
             string path = EditorUtility.SaveFilePanel("Save Recording", "", "recording.fasa", "fasa");
             if (path.Length != 0) {
-                string output = JsonConvert.SerializeObject(this._lastRecording, Formatting.Indented);   
+                string output = JsonConvert.SerializeObject(this._lastRecording);   
                 if (output != null) using (StreamWriter outputFile = new StreamWriter(path)) outputFile.WriteLine(output);
             }
         }
