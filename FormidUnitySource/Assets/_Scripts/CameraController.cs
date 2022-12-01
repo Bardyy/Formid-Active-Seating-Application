@@ -114,4 +114,16 @@ public class CameraController : MonoBehaviour {
         pos.y = 1.0f - (pos.y / Screen.height);
         return this.GetComponent<Camera>().rect.Contains(pos);
     }
+
+    // Destroy the prefab preset views object
+    public void DestroyPresetViewsUI() {
+        Destroy(this._presetViews);
+    }
+
+    // Set the x offset (from the left) of the preset views object attributed to this camera. 
+    public void SetPresetViewsUIXOffset(float xOffsetNormal) {
+        float canvasWidth = GameObject.Find("Canvas").GetComponent<RectTransform>().rect.width;
+        Rect r = this._presetViews.GetComponent<RectTransform>().rect;
+        this._presetViews.GetComponent<RectTransform>().anchoredPosition = new Vector2(-(1.0f - xOffsetNormal) * canvasWidth - r.width / 2.0f, -r.height / 2.0f);
+    }
 }

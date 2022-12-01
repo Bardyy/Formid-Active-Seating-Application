@@ -45,6 +45,8 @@ public class CameraAdder : MonoBehaviour {
         // Remove the last camera
         GameObject lastCamera = this._additionalCameraList[this._additionalCameraList.Count - 1];
         this._additionalCameraList.RemoveAt(this._additionalCameraList.Count - 1);
+        lastCamera.GetComponent<CameraController>().DestroyPresetViewsUI();
+
         Destroy(lastCamera);
         
         AdjustAllViewPorts();
@@ -55,9 +57,11 @@ public class CameraAdder : MonoBehaviour {
         int numCameras = 1 + this._additionalCameraList.Count;
         float width = 1.0f / numCameras;
         this.GetComponent<Camera>().rect = new Rect(0, 0, width, this.GetComponent<Camera>().rect.height);
+        this.GetComponent<CameraController>().SetPresetViewsUIXOffset(width);
         for(int i = 1; i < numCameras; i++) {
             Camera cam = this._additionalCameraList[i - 1].GetComponent<Camera>();
             cam.rect = new Rect(i * width, 0, width, cam.rect.height);
+            cam.GetComponent<CameraController>().SetPresetViewsUIXOffset((i + 1) * width);
         }
     }
 }
