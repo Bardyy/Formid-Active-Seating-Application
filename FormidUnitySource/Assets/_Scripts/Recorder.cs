@@ -101,14 +101,15 @@ public class Recorder : MonoBehaviour {
     public void StartRecording() {
         // Only perform if in standby state
         if(this._state == RecorderState.Standby) {
-            // TODO: Prompt user if they would like to overwrite the last recording
             
-            _timeRelativeStart = Time.time;
-            this._lastRecording = null;
-            this._currentRecording = new Recording();
-            // Add first frame
-            this._currentRecording.AddFrame(this.postureControl.Position, 0.0f);
-            this._state = RecorderState.Recording;       // Set state to recording
+            if(PromptOverwrite()) {
+                _timeRelativeStart = Time.time;
+                this._lastRecording = null;
+                this._currentRecording = new Recording();
+                // Add first frame
+                this._currentRecording.AddFrame(this.postureControl.Position, 0.0f);
+                this._state = RecorderState.Recording;       // Set state to recording
+            }
         }
     }
 
