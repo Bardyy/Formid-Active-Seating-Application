@@ -49,6 +49,10 @@ public class Recorder : MonoBehaviour {
         case RecorderState.Standby:
             this.recordingSignifierUI.SetActive(false);
             this.playbackSignifierUI.SetActive(false);
+            this.recordButton.GetComponentInChildren<Text>().text = "Record";
+            this.playButton.GetComponentInChildren<Text>().text = "Play";
+            this.loadButton.SetActive(true);
+            this.saveButton.SetActive(true);
             break;
         case RecorderState.Recording:
             // Each update: If the posture has changed, add the new frame with timestamp to the recording
@@ -58,6 +62,9 @@ public class Recorder : MonoBehaviour {
             }
             this.recordingSignifierUI.SetActive(true);
             this.playbackSignifierUI.SetActive(false);
+            this.recordButton.GetComponentInChildren<Text>().text = "Stop";
+            this.loadButton.SetActive(false);
+            this.saveButton.SetActive(false);
             break;
         case RecorderState.Playback:
             if(Time.time - _timeRelativeStart >= this._lastRecording.Frames[this._playbackIndex].Timestamp) {
@@ -66,6 +73,9 @@ public class Recorder : MonoBehaviour {
             }
             this.recordingSignifierUI.SetActive(false);
             this.playbackSignifierUI.SetActive(true);
+            this.playButton.GetComponentInChildren<Text>().text = "Stop";
+            this.loadButton.SetActive(false);
+            this.saveButton.SetActive(false);
             break;
         default:    // Nothing in default state
             break;
@@ -94,19 +104,9 @@ public class Recorder : MonoBehaviour {
     public void ToggleRecording() {
         if(this._state == RecorderState.Standby) {
             StartRecording();
-            if (this._state == RecorderState.Recording) {
-                this.recordButton.GetComponentInChildren<Text>().text = "Stop";
-                this.loadButton.SetActive(false);
-                this.saveButton.SetActive(false);
-            }
         }
         else if(this._state == RecorderState.Recording) {
             StopRecording();
-            if (this._state == RecorderState.Standby) {
-                this.recordButton.GetComponentInChildren<Text>().text = "Record";
-                this.loadButton.SetActive(true);
-                this.saveButton.SetActive(true);
-            }
         }
     }
 
@@ -114,15 +114,9 @@ public class Recorder : MonoBehaviour {
     public void TogglePlayback() {
         if(this._state == RecorderState.Standby) {
             StartPlayback();
-            if (this._state == RecorderState.Playback) {
-                this.playButton.GetComponentInChildren<Text>().text = "Stop";
-            }
         }
-        else if(this._state == RecorderState.Playback){
+        else if(this._state == RecorderState.Playback) {
             StopPlayback();
-            if (this._state == RecorderState.Standby) {
-                this.playButton.GetComponentInChildren<Text>().text = "Play";
-            }
         }
     }
 
