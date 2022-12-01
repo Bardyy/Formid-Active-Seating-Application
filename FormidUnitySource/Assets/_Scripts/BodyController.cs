@@ -15,6 +15,8 @@ public class BodyController : MonoBehaviour {
     public GameObject rightUpperLeg;
     public GameObject neck;
     public GameObject chair;
+
+    public Recorder recorder;       // Tape recorder
     
     public string configFilePath = "config.json";       // Config.JSON file path (including file name and extension)
     public string chairSerialPortName = "";             // COM port for the chair input
@@ -24,6 +26,12 @@ public class BodyController : MonoBehaviour {
     private PostureList _postures;
     private PostureInputInterface _sInput;
     private int _position = 0;
+
+    // - - - - Properties
+    public int Position {
+        get { return _position; }
+        set { return; }
+    }
 
     void Start() {
         // Set up serial input
@@ -37,11 +45,17 @@ public class BodyController : MonoBehaviour {
 
     // Update method for input handling
     void Update() {
-        if(debugMode) {
-            if(Input.GetKeyDown(KeyCode.Z)) this._position += 1;
-            if(Input.GetKeyDown(KeyCode.X)) this._position -= 1;
+        // Get position from either recording or from chair input
+        if(this.recorder.InPlayback()) {
+            _position = this.recorder.PlaybackPosition;
         }
-        else _position = this._sInput.GetInput();
+        else { 
+            if(debugMode) {
+                if(Input.GetKeyDown(KeyCode.Z)) this._position += 1;
+                if(Input.GetKeyDown(KeyCode.X)) this._position -= 1;
+            }
+            else _position = this._sInput.GetInput();
+        }
 
         // Maintain value within the number of postures available
         _position = Mathf.Clamp(_position, 0, this._postures.Size - 1);
