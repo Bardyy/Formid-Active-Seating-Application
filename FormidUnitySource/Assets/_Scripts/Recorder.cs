@@ -104,8 +104,14 @@ public class Recorder : MonoBehaviour {
 
     // Toggle Playback
     public void TogglePlayback() {
-        if(this._state == RecorderState.Standby) StartPlayback();
-        else if(this._state == RecorderState.Playback) StopPlayback();
+        if(this._state == RecorderState.Standby) {
+            StartPlayback();
+            this.playButton.GetComponentInChildren<Text>().text = "Stop";
+        }
+        else if(this._state == RecorderState.Playback){
+            StopPlayback();
+            this.playButton.GetComponentInChildren<Text>().text = "Play";
+        }
     }
 
     // Event for starting the recording
