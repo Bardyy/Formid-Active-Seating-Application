@@ -74,6 +74,12 @@ public class Recorder : MonoBehaviour {
         return this._state == RecorderState.Playback;
     }
 
+    // Prompt the user for recording overwrite
+    public bool PromptOverwrite() {
+        if(this._lastRecording == null) return true;
+        return EditorUtility.DisplayDialog("Overwrite recording", "This action will overwrite the existing recording. Would you like to continue?", "Yes", "No");
+    }
+
     // Return true if the current state is recording
     public bool InRecording() {
         return this._state == RecorderState.Recording;
