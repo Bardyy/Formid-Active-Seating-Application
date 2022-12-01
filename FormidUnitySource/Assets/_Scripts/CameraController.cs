@@ -18,6 +18,7 @@ public class CameraController : MonoBehaviour {
     public GameObject floor;
     public float mouseSens = 10.0f;
     public float distance = 3.0f;
+    public GameObject presetViewsPrefab;
 
     // - - - - Private variables
 

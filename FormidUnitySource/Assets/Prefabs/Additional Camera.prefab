@@ -92,3 +92,4 @@ MonoBehaviour:
   floor: {fileID: 0}
   mouseSens: 10
   distance: 3
+  presetViewsPrefab: {fileID: 715791810413082799, guid: 68c77c1687c596f4fba868812accaa12, type: 3}

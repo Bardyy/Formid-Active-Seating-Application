@@ -148,25 +148,18 @@ public class Recorder : MonoBehaviour {
         }
     }
 
-    // TODO:
     // Save recording to file
     public void SaveRecording() {
         // Only perform if in standby state
         if(this._state == RecorderState.Standby && this._lastRecording != null) {
-            // Write the string array to a new file named "Recording.formid".
-
             string path = EditorUtility.SaveFilePanel("Save Recording", "", "recording.fasa", "fasa");
-
             if (path.Length != 0) {
                 string output = JsonConvert.SerializeObject(this._lastRecording, Formatting.Indented);   
                 if (output != null) using (StreamWriter outputFile = new StreamWriter(path)) outputFile.WriteLine(output);
             }
-            
-        
         }
     }
 
-    // TODO:
     // Load recording from file
     public void LoadRecording() {
         // Only perform if in standby state
@@ -177,7 +170,6 @@ public class Recorder : MonoBehaviour {
                 string input = streamReader.ReadToEnd();
                 this._lastRecording = JsonConvert.DeserializeObject<Recording>(input);
             }
-            
         }
     }
 }
