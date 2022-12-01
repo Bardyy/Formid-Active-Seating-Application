@@ -94,11 +94,15 @@ public class Recorder : MonoBehaviour {
     public void ToggleRecording() {
         if(this._state == RecorderState.Standby) {
             StartRecording();
-            this.recordButton.GetComponentInChildren<Text>().text = "Stop";
+            if (this._state == RecorderState.Recording) {
+                this.recordButton.GetComponentInChildren<Text>().text = "Stop";
+            }
         }
         else if(this._state == RecorderState.Recording) {
             StopRecording();
-            this.recordButton.GetComponentInChildren<Text>().text = "Record";
+            if (this._state == RecorderState.Standby) {
+                this.recordButton.GetComponentInChildren<Text>().text = "Record";
+            }
         }
     }
 
@@ -106,11 +110,15 @@ public class Recorder : MonoBehaviour {
     public void TogglePlayback() {
         if(this._state == RecorderState.Standby) {
             StartPlayback();
-            this.playButton.GetComponentInChildren<Text>().text = "Stop";
+            if (this._state == RecorderState.Playback) {
+                this.playButton.GetComponentInChildren<Text>().text = "Stop";
+            }
         }
         else if(this._state == RecorderState.Playback){
             StopPlayback();
-            this.playButton.GetComponentInChildren<Text>().text = "Play";
+            if (this._state == RecorderState.Standby) {
+                this.playButton.GetComponentInChildren<Text>().text = "Play";
+            }
         }
     }
 
