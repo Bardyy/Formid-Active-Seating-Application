@@ -6,8 +6,6 @@ using UnityEngine;
 using UnityEditor;
 using Newtonsoft.Json;
 
-
-
 public class Recorder : MonoBehaviour {
 
     enum RecorderState { Standby, Recording, Playback }
@@ -172,6 +170,14 @@ public class Recorder : MonoBehaviour {
     // Load recording from file
     public void LoadRecording() {
         // Only perform if in standby state
-        
+        if(this._state == RecorderState.Standby) {
+            string path = EditorUtility.OpenFilePanel("Open Recording", "", "fasa");
+            if (path.Length != 0) {
+                StreamReader streamReader = new StreamReader(path);
+                string input = streamReader.ReadToEnd();
+                this._lastRecording = JsonConvert.DeserializeObject<Recording>(input);
+            }
+            
+        }
     }
 }
