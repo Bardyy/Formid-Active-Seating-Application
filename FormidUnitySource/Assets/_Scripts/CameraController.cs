@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraController : MonoBehaviour {
 
@@ -23,6 +24,8 @@ public class CameraController : MonoBehaviour {
     // - - - - Private variables
 
     private GameObject _pivotPoint;
+    private GameObject _presetViews;
+
 
     private float _floorHeight = -Mathf.Infinity;
     private float _ceilingHeight = 0;
@@ -33,7 +36,16 @@ public class CameraController : MonoBehaviour {
         if(defaultpivotPoint == null) defaultpivotPoint = GameObject.Find("Controller");    // If default pivot isn't defined, find it
         this._pivotPoint = defaultpivotPoint;   // Set pivot point to default
 
-        if(floor == null) floor = GameObject.Find("Floor");                                 // If default floor isn't defined, find it
+        // Create new preset views game object on instantiation
+        this._presetViews = Instantiate(this.presetViewsPrefab) as GameObject;
+        Transform canvasTransform = GameObject.Find("Canvas").transform;
+        this._presetViews.transform.localScale = canvasTransform.localScale;
+        this._presetViews.transform.SetParent(canvasTransform);
+        Rect r = this._presetViews.GetComponent<RectTransform>().rect;
+        this._presetViews.GetComponent<RectTransform>().anchoredPosition = new Vector2(-r.width / 2.0f, -r.height / 2.0f);
+
+        // If default floor isn't defined, find it
+        if(floor == null) floor = GameObject.Find("Floor");                                     
         if(this.floor != null) {
             _floorHeight = this.floor.transform.position.y + this.floor.transform.localScale.y / 2.0f + ANGLE_CLAMP_OFFSET;
         }
