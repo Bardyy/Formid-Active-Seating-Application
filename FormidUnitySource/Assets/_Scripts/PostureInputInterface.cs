@@ -16,7 +16,7 @@ public class PostureInputInterface {
 
             if(this._serialPort.IsOpen) _stableReading = this._serialPort.ReadByte();
         }
-        catch(System.Exception e) {
+        catch(System.Exception) {
             /* Error handling */
         }
     }

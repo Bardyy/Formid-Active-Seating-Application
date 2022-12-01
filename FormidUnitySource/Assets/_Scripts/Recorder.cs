@@ -30,16 +30,16 @@ public class Recorder : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         this._state = RecorderState.Standby;
-        this.recordingSignifierUI.active = false;
-        this.playbackSignifierUI.active = false;
+        this.recordingSignifierUI.SetActive(false);
+        this.playbackSignifierUI.SetActive(false);
     }
 
     // Update is called once per frame
     void Update() {
         switch(this._state) {
         case RecorderState.Standby:
-            this.recordingSignifierUI.active = false;
-            this.playbackSignifierUI.active = false;
+            this.recordingSignifierUI.SetActive(false);
+            this.playbackSignifierUI.SetActive(false);
             break;
         case RecorderState.Recording:
             // Each update: If the posture has changed, add the new frame with timestamp to the recording
@@ -47,16 +47,16 @@ public class Recorder : MonoBehaviour {
                 _previousPosition = this.postureControl.Position;
                 this._currentRecording.AddFrame(_previousPosition, Time.time - _timeRelativeStart);
             }
-            this.recordingSignifierUI.active = true;
-            this.playbackSignifierUI.active = false;
+            this.recordingSignifierUI.SetActive(true);
+            this.playbackSignifierUI.SetActive(false);
             break;
         case RecorderState.Playback:
             if(Time.time - _timeRelativeStart >= this._lastRecording.Frames[this._playbackIndex].Timestamp) {
                 this._playbackPosition = this._lastRecording.Frames[this._playbackIndex++].Posture;
                 if(this._playbackIndex == this._lastRecording.Frames.Count) StopPlayback();
             }
-            this.recordingSignifierUI.active = false;
-            this.playbackSignifierUI.active = true;
+            this.recordingSignifierUI.SetActive(false);
+            this.playbackSignifierUI.SetActive(true);
             break;
         default:    // Nothing in default state
             break;
