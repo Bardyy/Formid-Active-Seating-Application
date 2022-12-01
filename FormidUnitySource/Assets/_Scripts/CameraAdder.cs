@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class CameraAdder : MonoBehaviour {
 
-    public const int MAX_ADDITONAL_CAMERAS = 2;
+    public const int MAX_ADDITONAL_CAMERAS = 3;
     
     // - - - - Public variables
     public GameObject additionalCameraPrefab;
+    public GameObject addButton;
+    public GameObject removeButton;
 
     // - - - - Private variables
     private List<GameObject> _additionalCameraList;
@@ -18,9 +20,20 @@ public class CameraAdder : MonoBehaviour {
 
     // Update method for input handling
     void Update() {
-        // Add additional camera
-        if(Input.GetKeyDown(KeyCode.P)) AddCamera();
-        else if(Input.GetKeyDown(KeyCode.O)) RemoveCamera();
+        // Remove add button if maximum cameras reached
+        if (this._additionalCameraList.Count == MAX_ADDITONAL_CAMERAS) {
+            this.addButton.SetActive(false);
+        }
+        else {
+            this.addButton.SetActive(true);
+        }
+        // Hide remove button if minimum cameras reached
+        if (this._additionalCameraList.Count == 0) {
+            this.removeButton.SetActive(false);
+        }
+        else {
+            this.removeButton.SetActive(true);
+        }
     }
 
     // ------------------------- Helper methods -------------------------
