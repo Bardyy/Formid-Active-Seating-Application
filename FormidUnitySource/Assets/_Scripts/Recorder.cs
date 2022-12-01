@@ -96,12 +96,16 @@ public class Recorder : MonoBehaviour {
             StartRecording();
             if (this._state == RecorderState.Recording) {
                 this.recordButton.GetComponentInChildren<Text>().text = "Stop";
+                this.loadButton.SetActive(false);
+                this.saveButton.SetActive(false);
             }
         }
         else if(this._state == RecorderState.Recording) {
             StopRecording();
             if (this._state == RecorderState.Standby) {
                 this.recordButton.GetComponentInChildren<Text>().text = "Record";
+                this.loadButton.SetActive(true);
+                this.saveButton.SetActive(true);
             }
         }
     }
