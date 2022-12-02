@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18264292, g: 0.22558716, b: 0.29106823, a: 1}
+  m_IndirectSpecularColor: {r: 0.18264231, g: 0.22558592, b: 0.2910665, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -232,7 +232,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 50, y: 105}
+  m_AnchoredPosition: {x: 55, y: 65}
   m_SizeDelta: {x: 100, y: 12}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &132702989
@@ -264,8 +264,8 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4278255386
-  m_fontColor: {r: 0.10018206, g: 1, b: 0, a: 1}
+    rgba: 4280316680
+  m_fontColor: {r: 0.03137255, g: 0.4509804, b: 0.1254902, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -657,6 +657,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   additionalCameraPrefab: {fileID: 3144171850921271318, guid: 02c590ccca98be041abc22337485d6a2, type: 3}
+  addButton: {fileID: 1679507363}
+  removeButton: {fileID: 2082102354}
 --- !u!1 &671901337
 GameObject:
   m_ObjectHideFlags: 0
@@ -1511,6 +1513,10 @@ MonoBehaviour:
   postureControl: {fileID: 1221782574}
   recordingSignifierUI: {fileID: 1248790401}
   playbackSignifierUI: {fileID: 132702987}
+  loadButton: {fileID: 2093952481}
+  saveButton: {fileID: 703633592}
+  recordButton: {fileID: 2146688236}
+  playButton: {fileID: 1768984925}
 --- !u!1 &1248790401
 GameObject:
   m_ObjectHideFlags: 0
@@ -1546,7 +1552,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 50, y: 105}
+  m_AnchoredPosition: {x: 55, y: 65}
   m_SizeDelta: {x: 100, y: 12}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1248790403
