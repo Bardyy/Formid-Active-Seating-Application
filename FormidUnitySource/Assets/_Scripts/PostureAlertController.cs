@@ -9,6 +9,7 @@ public class PostureAlertController : MonoBehaviour {
 
     // - - - - Public variables
     public BodyController postureControl;
+    public GameObject alertBox;
     
     // - - - - Private variables
     private AlertState _state;
@@ -17,6 +18,7 @@ public class PostureAlertController : MonoBehaviour {
 
     void Awake() {
         this._state = AlertState.Disabled;
+        HideAlert();
         ResetTimer();
         ToggleAlertState();
     }
@@ -32,8 +34,7 @@ public class PostureAlertController : MonoBehaviour {
 
             // Display alert when timer exceeds posture timeout
             if(Time.time - _previousAlertTime >= this.postureControl.Positions.Postures[this.postureControl.Position].AlertTimeout) {
-                // TEMPORARY
-                EditorUtility.DisplayDialog("Posture Alert", "Please fix your posture", "Ok", "Cancel");
+                DisplayAlert();
                 ResetTimer();
             }
         }
@@ -51,5 +52,15 @@ public class PostureAlertController : MonoBehaviour {
         if(this._state == AlertState.Disabled) this._state = AlertState.Enabled;
         else if(this._state == AlertState.Enabled) this._state = AlertState.Disabled;
         ResetTimer();
+    }
+
+    // Making alert box visible
+    public void DisplayAlert(){
+        this.alertBox.SetActive(true);
+    }
+
+    // Making alert box invisible
+    public void HideAlert(){
+        this.alertBox.SetActive(false);
     }
 }
