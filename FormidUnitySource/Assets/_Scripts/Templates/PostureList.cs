@@ -19,6 +19,8 @@ public class PostureList {
                 return new Vector3(X, Y, Z);
             }
         }
+        // Name for each posture
+        public string Name {get; set;}
 
         // Pivot properties for each given posture
         public Pivot UpperLeftLeg { get; set; }
@@ -27,6 +29,9 @@ public class PostureList {
         public Pivot UpperTorso { get; set; }
         public Pivot Neck { get; set; }
         public Pivot Chair { get; set; }
+
+        // Timeout for alerts (in seconds)
+        public float AlertTimeout { get; set; }
     }
 
     // List of postures

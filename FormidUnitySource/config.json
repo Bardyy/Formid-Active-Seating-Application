@@ -1,6 +1,7 @@
 {
     "Postures": [
         {
+            "Name": "A",
             "UpperLeftLeg": {
                 "X": 80, "Y": 190, "Z": 105
             },
@@ -18,9 +19,11 @@
             },
             "Chair": {
                 "X": 5, "Y": 0, "Z": 0
-            }
+            },
+            "AlertTimeout": 300
         },
         {
+            "Name": "B1",
             "UpperLeftLeg": {
                 "X": 80, "Y": 190, "Z": 105
             },
@@ -38,9 +41,11 @@
             },
             "Chair": {
                 "X": 15, "Y": 0, "Z": 0
-            }
+            },
+            "AlertTimeout": 180
         },
         {
+            "Name": "B2",
             "UpperLeftLeg": {
                 "X": 80, "Y": 190, "Z": 105
             },
@@ -58,9 +63,11 @@
             },
             "Chair": {
                 "X": 15, "Y": 0, "Z": 0
-            }
+            },
+            "AlertTimeout": 60
         },
         {
+            "Name": "C1",
             "UpperLeftLeg": {
                 "X": 80, "Y": 190, "Z": 115
             },
@@ -78,9 +85,11 @@
             },
             "Chair": {
                 "X": 15, "Y": 0, "Z": 10
-            }
+            },
+            "AlertTimeout": 120
         },
         {
+            "Name": "C2",
             "UpperLeftLeg": {
                 "X": 80, "Y": 190, "Z": 115
             },
@@ -98,9 +107,11 @@
             },
             "Chair": {
                 "X": 15, "Y": 0, "Z": 10
-            }
+            },
+            "AlertTimeout": 60
         },
         {
+            "Name": "D1",
             "UpperLeftLeg": {
                 "X": 80, "Y": 190, "Z": 105
             },
@@ -118,9 +129,12 @@
             },
             "Chair": {
                 "X": 15, "Y": 0, "Z": -10
-            }
+            },
+            "AlertTimeout": 120
+
         },
         {
+            "Name": "D2",
             "UpperLeftLeg": {
                 "X": 80, "Y": 190, "Z": 105
             },
@@ -138,7 +152,8 @@
             },
             "Chair": {
                 "X": 15, "Y": 0, "Z": -10
-            }
+            },
+            "AlertTimeout": 60
         }
     ]
 }
