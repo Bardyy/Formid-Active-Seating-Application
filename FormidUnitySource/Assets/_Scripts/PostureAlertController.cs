@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using UnityEditor;
 
 public class PostureAlertController : MonoBehaviour {
@@ -10,6 +11,7 @@ public class PostureAlertController : MonoBehaviour {
     // - - - - Public variables
     public BodyController postureControl;
     public GameObject alertBox;
+    public GameObject toggleAlerts;
     
     // - - - - Private variables
     private AlertState _state;
@@ -49,8 +51,14 @@ public class PostureAlertController : MonoBehaviour {
 
     // Toggle alert state
     public void ToggleAlertState() {
-        if(this._state == AlertState.Disabled) this._state = AlertState.Enabled;
-        else if(this._state == AlertState.Enabled) this._state = AlertState.Disabled;
+        if(this._state == AlertState.Disabled){
+            this._state = AlertState.Enabled;
+            this.toggleAlerts.GetComponentInChildren<TMP_Text>().text = "Disable Alerts";
+        } 
+        else if(this._state == AlertState.Enabled){
+            this._state = AlertState.Disabled;
+            this.toggleAlerts.GetComponentInChildren<TMP_Text>().text = "Enable Alerts";
+        } 
         ResetTimer();
     }
 
