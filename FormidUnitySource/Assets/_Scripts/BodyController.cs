@@ -32,7 +32,11 @@ public class BodyController : MonoBehaviour {
         get { return _position; }
         set { return; }
     }
-
+    public PostureList Positions {
+        get { return _postures; }
+        set { return; }
+    }
+    
     void Start() {
         // Set up serial input
         if(!debugMode) this._sInput = new PostureInputInterface(chairSerialPortName, CHAIR_INPUT_BAUD_RATE);
