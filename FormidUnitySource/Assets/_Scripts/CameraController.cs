@@ -44,23 +44,37 @@ public class CameraController : MonoBehaviour {
         Rect r = this._presetViews.GetComponent<RectTransform>().rect;
         this._presetViews.GetComponent<RectTransform>().anchoredPosition = new Vector2(-r.width / 2.0f, -r.height / 2.0f);
 
-        // Set button actions for preset views (TODO: FIX THIS FORMATTING, DO NOT USE MAGIC NUMBERS 0-4)
-        this._presetViews.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(delegate() { 
-            this.transform.position = this._pivotPoint.transform.position + (new Vector3(0, 0, 1)); 
-        });
-        this._presetViews.transform.GetChild(1).GetComponent<Button>().onClick.AddListener(delegate() { 
-            this.transform.position = this._pivotPoint.transform.position + (new Vector3(-1, 0, 0)); 
-        });
-        this._presetViews.transform.GetChild(2).GetComponent<Button>().onClick.AddListener(delegate() { 
-            this.transform.position = this._pivotPoint.transform.position + (new Vector3(1, 0, 0)); 
-        });
-        this._presetViews.transform.GetChild(3).GetComponent<Button>().onClick.AddListener(delegate() { 
-            this.transform.position = this._pivotPoint.transform.position + (new Vector3(1, 1, 1)); 
-        });
-        this._presetViews.transform.GetChild(4).GetComponent<Button>().onClick.AddListener(delegate() { 
-            this.transform.position = this._pivotPoint.transform.position + (new Vector3(0, 0, -1)); 
-        });
 
+        for (int i=0; i<this._presetViews.transform.childCount; i++) {
+
+            Transform child = this._presetViews.transform.GetChild(i);
+            if(child.name == "FrontView") {
+                child.GetComponent<Button>().onClick.AddListener(delegate() { 
+                    this.transform.position = this._pivotPoint.transform.position + (new Vector3(0, 0, 1)); 
+                });
+            }
+            else if(child.name == "LeftSideView") {
+                child.GetComponent<Button>().onClick.AddListener(delegate() { 
+                    this.transform.position = this._pivotPoint.transform.position + (new Vector3(-1, 0, 0)); 
+                });
+            }
+            else if(child.name == "RightSideView") {
+                child.GetComponent<Button>().onClick.AddListener(delegate() { 
+                    this.transform.position = this._pivotPoint.transform.position + (new Vector3(1, 0, 0)); 
+                });
+            }
+            else if(child.name == "DiagonalView") {
+                child.GetComponent<Button>().onClick.AddListener(delegate() { 
+                    this.transform.position = this._pivotPoint.transform.position + (new Vector3(1, 1, 1)); 
+                });
+            }
+            else if(child.name == "BackView") {
+                child.GetComponent<Button>().onClick.AddListener(delegate() { 
+                    this.transform.position = this._pivotPoint.transform.position + (new Vector3(0, 0, -1)); 
+                });
+            }
+        }
+        
         // If default floor isn't defined, find it
         if(floor == null) floor = GameObject.Find("Floor");                                     
         if(this.floor != null) {
