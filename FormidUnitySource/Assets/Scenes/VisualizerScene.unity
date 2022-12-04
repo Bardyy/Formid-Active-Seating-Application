@@ -1566,7 +1566,7 @@ GameObject:
   - component: {fileID: 1057990416}
   - component: {fileID: 1057990415}
   m_Layer: 5
-  m_Name: Toggle Alert Box
+  m_Name: Toggle Alert Button
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

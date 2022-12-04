@@ -47,12 +47,6 @@ public class Recorder : MonoBehaviour {
     void Update() {
         switch(this._state) {
         case RecorderState.Standby:
-            this.recordingSignifierUI.SetActive(false);
-            this.playbackSignifierUI.SetActive(false);
-            this.recordButton.GetComponentInChildren<Text>().text = "Record";
-            this.playButton.GetComponentInChildren<Text>().text = "Play";
-            this.loadButton.SetActive(true);
-            this.saveButton.SetActive(true);
             break;
         case RecorderState.Recording:
             // Each update: If the posture has changed, add the new frame with timestamp to the recording
@@ -60,22 +54,12 @@ public class Recorder : MonoBehaviour {
                 _previousPosition = this.postureControl.Position;
                 this._currentRecording.AddFrame(_previousPosition, Time.time - _timeRelativeStart);
             }
-            this.recordingSignifierUI.SetActive(true);
-            this.playbackSignifierUI.SetActive(false);
-            this.recordButton.GetComponentInChildren<Text>().text = "Stop";
-            this.loadButton.SetActive(false);
-            this.saveButton.SetActive(false);
             break;
         case RecorderState.Playback:
             if(Time.time - _timeRelativeStart >= this._lastRecording.Frames[this._playbackIndex].Timestamp) {
                 this._playbackPosition = this._lastRecording.Frames[this._playbackIndex++].Posture;
                 if(this._playbackIndex == this._lastRecording.Frames.Count) StopPlayback();
             }
-            this.recordingSignifierUI.SetActive(false);
-            this.playbackSignifierUI.SetActive(true);
-            this.playButton.GetComponentInChildren<Text>().text = "Stop";
-            this.loadButton.SetActive(false);
-            this.saveButton.SetActive(false);
             break;
         default:    // Nothing in default state
             break;
@@ -132,6 +116,12 @@ public class Recorder : MonoBehaviour {
                 // Add first frame
                 this._currentRecording.AddFrame(this.postureControl.Position, 0.0f);
                 this._state = RecorderState.Recording;       // Set state to recording
+
+                this.recordingSignifierUI.SetActive(true);
+                this.playbackSignifierUI.SetActive(false);
+                this.recordButton.GetComponentInChildren<Text>().text = "Stop";
+                this.loadButton.SetActive(false);
+                this.saveButton.SetActive(false);
             }
         }
     }
@@ -151,6 +141,13 @@ public class Recorder : MonoBehaviour {
             this._playbackPosition = -1;
             this._timeRelativeStart = 0.0f;
             this._state = RecorderState.Standby;        // Reset state
+
+            this.recordingSignifierUI.SetActive(false);
+            this.playbackSignifierUI.SetActive(false);
+            this.recordButton.GetComponentInChildren<Text>().text = "Record";
+            this.playButton.GetComponentInChildren<Text>().text = "Play";
+            this.loadButton.SetActive(true);
+            this.saveButton.SetActive(true);
         }
     }
 
@@ -162,6 +159,12 @@ public class Recorder : MonoBehaviour {
             this._playbackIndex = 0;
             this._playbackPosition = this._lastRecording.Frames[this._playbackIndex++].Posture;
             this._state = RecorderState.Playback;       // Set state to playback
+
+            this.recordingSignifierUI.SetActive(false);
+            this.playbackSignifierUI.SetActive(true);
+            this.playButton.GetComponentInChildren<Text>().text = "Stop";
+            this.loadButton.SetActive(false);
+            this.saveButton.SetActive(false);
         }
     }
 
@@ -175,6 +178,13 @@ public class Recorder : MonoBehaviour {
             this._playbackPosition = -1;
             this._timeRelativeStart = 0.0f;
             this._state = RecorderState.Standby;        // Reset state
+
+            this.recordingSignifierUI.SetActive(false);
+            this.playbackSignifierUI.SetActive(false);
+            this.recordButton.GetComponentInChildren<Text>().text = "Record";
+            this.playButton.GetComponentInChildren<Text>().text = "Play";
+            this.loadButton.SetActive(true);
+            this.saveButton.SetActive(true);
         }
     }
 
