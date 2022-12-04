@@ -26,7 +26,6 @@ public class CameraController : MonoBehaviour {
     private GameObject _pivotPoint;
     private GameObject _presetViews;
 
-
     private float _floorHeight = -Mathf.Infinity;
     private float _ceilingHeight = 0;
     private float _scrollSpeed = 0.5f;

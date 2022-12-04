@@ -37,7 +37,7 @@ public class Recorder : MonoBehaviour {
     }
 
     // Start is called before the first frame update
-    void Start() {
+    void Awake() {
         this._state = RecorderState.Standby;
         this.recordingSignifierUI.SetActive(false);
         this.playbackSignifierUI.SetActive(false);

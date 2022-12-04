@@ -14,7 +14,7 @@ public class CameraAdder : MonoBehaviour {
     // - - - - Private variables
     private List<GameObject> _additionalCameraList;
 
-    void Start() {
+    void Awake() {
         this._additionalCameraList = new List<GameObject>();        
     }
 
