@@ -47,6 +47,19 @@ public class Recorder : MonoBehaviour {
     void Update() {
         switch(this._state) {
         case RecorderState.Standby:
+            // Set save and play buttons to show as disabled (transparent) when there is no video to save or play
+            if(this._lastRecording == null) {
+                Image imgSave = this.saveButton.GetComponentInChildren<Image>();
+                imgSave.color = new Color(imgSave.color.r, imgSave.color.g, imgSave.color.b, 0.5f);
+                Image imgPlay = this.playButton.GetComponentInChildren<Image>();
+                imgPlay.color = new Color(imgPlay.color.r, imgPlay.color.g, imgPlay.color.b, 0.5f);
+            }
+            else {
+                Image imgSave = this.saveButton.GetComponentInChildren<Image>();
+                imgSave.color = new Color(imgSave.color.r, imgSave.color.g, imgSave.color.b, 1f);
+                Image imgPlay = this.playButton.GetComponentInChildren<Image>();
+                imgPlay.color = new Color(imgPlay.color.r, imgPlay.color.g, imgPlay.color.b, 1f);
+            }
             break;
         case RecorderState.Recording:
             // Each update: If the posture has changed, add the new frame with timestamp to the recording
@@ -122,6 +135,7 @@ public class Recorder : MonoBehaviour {
                 this.recordButton.GetComponentInChildren<Text>().text = "Stop";
                 this.loadButton.SetActive(false);
                 this.saveButton.SetActive(false);
+                this.playButton.SetActive(false);
             }
         }
     }
@@ -148,6 +162,7 @@ public class Recorder : MonoBehaviour {
             this.playButton.GetComponentInChildren<Text>().text = "Play";
             this.loadButton.SetActive(true);
             this.saveButton.SetActive(true);
+            this.playButton.SetActive(true);
         }
     }
 
@@ -165,6 +180,7 @@ public class Recorder : MonoBehaviour {
             this.playButton.GetComponentInChildren<Text>().text = "Stop";
             this.loadButton.SetActive(false);
             this.saveButton.SetActive(false);
+            this.recordButton.SetActive(false);
         }
     }
 
@@ -185,6 +201,7 @@ public class Recorder : MonoBehaviour {
             this.playButton.GetComponentInChildren<Text>().text = "Play";
             this.loadButton.SetActive(true);
             this.saveButton.SetActive(true);
+            this.recordButton.SetActive(true);
         }
     }
 
