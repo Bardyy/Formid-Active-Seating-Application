@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraAdder : MonoBehaviour {
 
@@ -22,17 +23,21 @@ public class CameraAdder : MonoBehaviour {
     void Update() {
         // Remove add button if maximum cameras reached
         if (this._additionalCameraList.Count == MAX_ADDITONAL_CAMERAS) {
-            this.addButton.SetActive(false);
+            Image img = this.addButton.GetComponent<Image>();
+            img.color = new Color(img.color.r, img.color.g, img.color.b, 0.5f);
         }
         else {
-            this.addButton.SetActive(true);
+            Image img = this.addButton.GetComponent<Image>();
+            img.color = new Color(img.color.r, img.color.g, img.color.b, 1f);
         }
         // Hide remove button if minimum cameras reached
         if (this._additionalCameraList.Count == 0) {
-            this.removeButton.SetActive(false);
+            Image img = this.removeButton.GetComponent<Image>();
+            img.color = new Color(img.color.r, img.color.g, img.color.b, 0.5f);
         }
         else {
-            this.removeButton.SetActive(true);
+            Image img = this.removeButton.GetComponent<Image>();
+            img.color = new Color(img.color.r, img.color.g, img.color.b, 1f);
         }
     }
 

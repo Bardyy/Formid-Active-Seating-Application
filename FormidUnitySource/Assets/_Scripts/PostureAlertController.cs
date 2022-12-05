@@ -10,13 +10,16 @@ public class PostureAlertController : MonoBehaviour {
 
     // - - - - Public variables
     public BodyController postureControl;
+    public AudioSource alertAudio;
     public GameObject alertBox;
     public GameObject toggleAlerts;
+    public float alertBoxSpeed = 5.0f;
     
     // - - - - Private variables
     private AlertState _state;
     private float _previousAlertTime;
     private int _currentPosture = -1;
+    private float _alertMessageMovement = 0.0f;
 
     void Awake() {
         this._state = AlertState.Disabled;
@@ -25,6 +28,7 @@ public class PostureAlertController : MonoBehaviour {
         ToggleAlertState();
     }
 
+    // Update method for input handling
     void Update() {
         // Only if the state is currently enabled
         if(this._state == AlertState.Enabled) {
@@ -39,6 +43,22 @@ public class PostureAlertController : MonoBehaviour {
                 DisplayAlert();
                 ResetTimer();
             }
+        }
+    }
+
+    // LateUpdate for auto-adjustments handled by engine
+    public void LateUpdate() {
+        // Move alert box if movement is true
+        if(_alertMessageMovement != 0) this.alertBox.GetComponent<RectTransform>().anchoredPosition += new Vector2(_alertMessageMovement, 0);
+
+        // Stop movement when edge reached
+        if(_alertMessageMovement < 0 && this.alertBox.GetComponent<RectTransform>().anchoredPosition.x <= -this.alertBox.GetComponent<RectTransform>().rect.width / 2.0f) {
+            _alertMessageMovement = 0;
+            this.alertBox.GetComponent<RectTransform>().anchoredPosition = new Vector2(-this.alertBox.GetComponent<RectTransform>().rect.width / 2.0f, this.alertBox.GetComponent<RectTransform>().anchoredPosition.y);
+        }
+        else if (_alertMessageMovement > 0 && this.alertBox.GetComponent<RectTransform>().anchoredPosition.x >= this.alertBox.GetComponent<RectTransform>().rect.width / 2.0f) {
+            _alertMessageMovement = 0;
+            this.alertBox.GetComponent<RectTransform>().anchoredPosition = new Vector2(this.alertBox.GetComponent<RectTransform>().rect.width / 2.0f, this.alertBox.GetComponent<RectTransform>().anchoredPosition.y);
         }
     }
 
@@ -64,11 +84,17 @@ public class PostureAlertController : MonoBehaviour {
 
     // Making alert box visible
     public void DisplayAlert(){
-        this.alertBox.SetActive(true);
+        _alertMessageMovement = -alertBoxSpeed;
+        PlayAlert();
     }
 
     // Making alert box invisible
     public void HideAlert(){
-        this.alertBox.SetActive(false);
+        _alertMessageMovement = alertBoxSpeed;
+    }
+    
+    // Play alert sound
+    public void PlayAlert() {
+        this.alertAudio.Play();
     }
 }
