@@ -14,6 +14,8 @@ public class PostureAlertController : MonoBehaviour {
     public GameObject alertBox;
     public GameObject toggleAlerts;
     public float alertBoxSpeed = 5.0f;
+
+    public Recorder recorder;       // Tape recorder
     
     // - - - - Private variables
     private AlertState _state;
@@ -30,6 +32,14 @@ public class PostureAlertController : MonoBehaviour {
 
     // Update method for input handling
     void Update() {
+        // If in recorder playback or record mode, do not count alert
+        if(this.recorder.InPlayback() || this.recorder.InRecording()) {
+            this.toggleAlerts.SetActive(false);
+            ResetTimer();
+            return;
+        }
+        else this.toggleAlerts.SetActive(true);
+
         // Only if the state is currently enabled
         if(this._state == AlertState.Enabled) {
             // Reset timer when posture changes

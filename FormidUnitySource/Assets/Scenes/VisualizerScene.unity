@@ -1979,7 +1979,7 @@ MonoBehaviour:
   recorder: {fileID: 1221782579}
   configFilePath: config.json
   chairSerialPortName: COM5
-  debugMode: 0
+  debugMode: 1
 --- !u!135 &1221782575
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2094,6 +2094,7 @@ MonoBehaviour:
   alertBox: {fileID: 477235887}
   toggleAlerts: {fileID: 1057990413}
   alertBoxSpeed: 5
+  recorder: {fileID: 1221782579}
 --- !u!82 &1221782581
 AudioSource:
   m_ObjectHideFlags: 0
