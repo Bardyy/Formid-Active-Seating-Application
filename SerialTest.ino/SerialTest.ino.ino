@@ -1,6 +1,6 @@
 #define PIN_NUMBER 2
-#define MAX_POSTURE 6
-#define BAUD_RATE 9600
+#define MAX_POSTURE 7
+#define BAUD_RATE 115200
 
 int posture = 0;
 int lastState = 0;
