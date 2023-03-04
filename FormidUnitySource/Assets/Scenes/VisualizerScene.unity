@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.18264292, g: 0.22558716, b: 0.29106823, a: 1}
+  m_IndirectSpecularColor: {r: 0.18264231, g: 0.22558592, b: 0.2910665, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2644,7 +2644,7 @@ MonoBehaviour:
   configFilePath: config.json
   chairSerialPortName: COM5
   chairTimeoutDuration: 1
-  debugMode: 0
+  debugMode: 1
 --- !u!135 &1221782575
 SphereCollider:
   m_ObjectHideFlags: 0

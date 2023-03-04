@@ -16,6 +16,8 @@ $lastname = $_POST["lastname"];
 $email = $_POST["email"];
 
 
+
+
 $insertuserquery = "INSERT INTO User (username,pass,firstName,lastName,email) VALUES ( '" . $username . "' , '" . $passsword . "' , '" . $firstname . " ', '" . $lastname . " ', '" . $email . "');";
 
 mysqli_query($con, $insertuserquery) or die("4: Insert user query failed");
