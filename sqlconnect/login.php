@@ -6,24 +6,19 @@ $con = mysqli_connect('localhost','root','root','FormidActiveSeating');
 if(mysqli_connect_errno()){
     echo "1";
     exit();
-
 }
 
 $username = $_POST["username"];
 $passsword = $_POST["password"];
 
-$insertuserquery = " SELECT * FROM USER WHERE username = '" . $username . "'  'AND' 'password' = '" . $password . "' ;";
+$insertuserquery = "SELECT * FROM USER WHERE username = '" . $username . "'  'AND' 'password' = '" . $password . "' ;";
 
 $check = mysqli_query($con, $insertuserquery);
 
-if (mysqli_num_rows($check) > 0){
-
-    echo("sucess");
-}else{
-
+if (mysqli_num_rows($check) > 0) {
+    echo("success");
+} else {
     echo("invalid");
 }
 
-
-
- ?>
+?>
