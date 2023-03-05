@@ -10,7 +10,7 @@ public class Register : MonoBehaviour
     public TMP_Text firstNameInputField;
     public TMP_Text lastNameInputField;
     public TMP_Text userNameInputField;
-    public TMP_Text passwordInputField;
+    public TMP_InputField passwordInputField;
 
     public Button RegisterSubmitButton;
 
@@ -22,6 +22,7 @@ public class Register : MonoBehaviour
     IEnumerator Registering()
     {
         WWWForm form = new WWWForm();
+        passwordInputField.contentType = TMP_InputField.ContentType.Standard;
         form.AddField("firstname",firstNameInputField.text);
         form.AddField("lastname",lastNameInputField.text);
         form.AddField("email",emailInputField.text);

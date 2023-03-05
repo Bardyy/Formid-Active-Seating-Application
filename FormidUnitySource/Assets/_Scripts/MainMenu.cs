@@ -8,7 +8,7 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     public TMP_Text usernameInputField;
-    public TMP_Text passwordInputField;
+    public TMP_InputField passwordInputField;
 
 
     public void CallLogin()
@@ -20,6 +20,7 @@ public class MainMenu : MonoBehaviour
     IEnumerator LoginUser()
     {
         WWWForm form1 = new WWWForm();
+        passwordInputField.contentType = TMP_InputField.ContentType.Standard;
         form1.AddField("username",usernameInputField.text);
         form1.AddField("password",passwordInputField.text);
 
