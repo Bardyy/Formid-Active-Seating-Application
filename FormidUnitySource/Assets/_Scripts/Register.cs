@@ -44,4 +44,8 @@ public class Register : MonoBehaviour
         }
 
     }
+
+    public void BackButton(){
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    }
 }

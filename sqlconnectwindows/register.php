@@ -18,7 +18,7 @@ $email = $_POST["email"];
 $hashed_pass = hash('sha256', $passsword);
 
 
-$insertuserquery = "INSERT INTO user (username,pass,firstName,lastName,email) VALUES ( '" . $username . "' , '" . $hashed_pass . "' , '" . $firstname . " ', '" . $lastname . " ', '" . $email . "');";
+$insertuserquery = "INSERT INTO User (username,pass,firstName,lastName,email) VALUES ( '" . $username . "' , '" . $hashed_pass . "' , '" . $firstname . " ', '" . $lastname . " ', '" . $email . "');";
 
 mysqli_query($con, $insertuserquery) or die("4: Insert user query failed");
 

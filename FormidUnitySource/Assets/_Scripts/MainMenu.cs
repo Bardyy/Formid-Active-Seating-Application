@@ -14,7 +14,6 @@ public class MainMenu : MonoBehaviour
     public void CallLogin()
     {
         StartCoroutine(LoginUser());
-        Debug.Log("Hallo");
     }
 
     IEnumerator LoginUser()
@@ -23,11 +22,14 @@ public class MainMenu : MonoBehaviour
         passwordInputField.contentType = TMP_InputField.ContentType.Standard;
         form1.AddField("username",usernameInputField.text);
         form1.AddField("password",passwordInputField.text);
+        
+        string username = usernameInputField.text;
+        PlayerPrefs.SetString("username", username);
+        UserManager.username = username;
 
         WWW www = new WWW("http://localhost:8888/sqlconnect/login.php", form1);
         yield return www;
-
-        if(www.text == "sucess")
+        if(www.text == "success")
         {
             Debug.Log("User Login Successful.");
             UnityEngine.SceneManagement.SceneManager.LoadScene(2);
@@ -38,8 +40,12 @@ public class MainMenu : MonoBehaviour
             Debug.Log("Invalid username or pass");
     
         }
+        if(www.text == "No user exists")
+        {
+            Debug.Log("No user exists");
+    
+        }
 
-    // }
 
 }
 }
