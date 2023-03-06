@@ -208,13 +208,34 @@ public class Recorder : MonoBehaviour {
     // Save recording to file
     public void SaveRecording() {
         // Only perform if in standby state
+        // if(this._state == RecorderState.Standby && this._lastRecording != null) {
+        //     string path = EditorUtility.SaveFilePanel("Save Recording", "", "recording.fasa", "fasa");
+        //     if (path.Length != 0) {
+        //         string output = JsonConvert.SerializeObject(this._lastRecording);   
+        //         if (output != null) using (StreamWriter outputFile = new StreamWriter(path)) outputFile.WriteLine(output);
+        //     }
+        // }
         if(this._state == RecorderState.Standby && this._lastRecording != null) {
-            string path = EditorUtility.SaveFilePanel("Save Recording", "", "recording.fasa", "fasa");
-            if (path.Length != 0) {
-                string output = JsonConvert.SerializeObject(this._lastRecording);   
-                if (output != null) using (StreamWriter outputFile = new StreamWriter(path)) outputFile.WriteLine(output);
-            }
+            StartCoroutine(SavingData());
+
         }
+
+    }
+
+    IEnumerator SavingData()
+    {
+        // this._lastRecording.Frames[this._lastRecording.Frames.Count-1].Timestamp.ToString()
+        WWWForm form = new WWWForm();
+        form.AddField("startTime",this._lastRecording.startTime.ToString("yyyy-MM-dd HH:mm:ss"));
+        form.AddField("duration",this._lastRecording.Frames[this._lastRecording.Frames.Count-1].Timestamp.ToString());
+        form.AddField("data",JsonConvert.SerializeObject(this._lastRecording));
+        form.AddField("username", UserManager.username);
+
+        WWW www = new WWW("http://localhost:8888/sqlconnect/saverecording.php", form);
+        yield return www;
+
+        Debug.Log(www.text);
+
     }
 
     // Load recording from file
