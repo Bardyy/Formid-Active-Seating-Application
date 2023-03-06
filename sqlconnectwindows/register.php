@@ -10,12 +10,12 @@ if(mysqli_connect_errno()){
 }
 
 $username = $_POST["username"];
-$passsword = $_POST["password"];
+$password = $_POST["password"];
 $firstname = $_POST["firstname"];
 $lastname = $_POST["lastname"];
 $email = $_POST["email"];
 
-$hashed_pass = hash('sha256', $passsword);
+$hashed_pass = hash('sha256', $password);
 
 
 $insertuserquery = "INSERT INTO User (username,pass,firstName,lastName,email) VALUES ( '" . $username . "' , '" . $hashed_pass . "' , '" . $firstname . " ', '" . $lastname . " ', '" . $email . "');";

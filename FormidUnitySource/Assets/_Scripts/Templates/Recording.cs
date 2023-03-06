@@ -40,6 +40,11 @@ public class Recording {
         startTime = DateTime.Now; 
     }
 
+    public Recording(string datetime) {
+        this.Frames = new List<Frame>();
+        startTime = DateTime.Parse(datetime); 
+    }
+
     // Add a frame to recording
     public void AddFrame(int posture, float timestamp) {
         this.Frames.Add(new Frame(posture, timestamp));

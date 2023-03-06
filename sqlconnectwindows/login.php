@@ -4,7 +4,7 @@ $con = mysqli_connect('localhost:8889','root','root','formidactiveseating');
 
 //check for connection
 if(mysqli_connect_errno()){
-    echo "Unable to connect....";
+    echo "1";
     exit();
 
 }
@@ -22,17 +22,15 @@ if (mysqli_num_rows($check) != 1){
 
     echo("No user exists");
 }
-else {
-    $userinfo = mysqli_fetch_assoc($check);
-    $enteredPass = $userinfo["pass"];
-    
-    
-    if($enteredPass != $hashed_pass){
-        echo("invalid");
-    }else{
-        echo("success");
-    }
-}
 
+$userinfo = mysqli_fetch_assoc($check);
+$enteredPass = $userinfo["pass"];
+
+
+if($enteredPass != $hashed_pass){
+    echo("invalid");
+}else{
+    echo("success");
+}
 
  ?>

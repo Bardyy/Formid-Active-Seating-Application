@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 using UnityEditor;
 using Newtonsoft.Json;
 
@@ -19,6 +20,9 @@ public class Recorder : MonoBehaviour {
     public GameObject saveButton;
     public GameObject recordButton;
     public GameObject playButton;
+
+    public GameObject recordingListView;
+    public GameObject recordingListContent;
     
     // - - - - Private variables
     private RecorderState _state;
@@ -41,6 +45,7 @@ public class Recorder : MonoBehaviour {
         this._state = RecorderState.Standby;
         this.recordingSignifierUI.SetActive(false);
         this.playbackSignifierUI.SetActive(false);
+        this.recordingListView.SetActive(false);
     }
 
     // Update is called once per frame
@@ -81,15 +86,24 @@ public class Recorder : MonoBehaviour {
 
     // ------------------------- Helper methods -------------------------
 
+    // Enable recording list view
+    public void EnableRecordingListView() {
+        this.recordingListView.SetActive(true);
+    }
+
+    // Disable recording list view
+    public void DisableRecordingListView() {
+        this.recordingListView.SetActive(false);
+    }
+
     // Return true if the current state is playback
     public bool InPlayback() {
         return this._state == RecorderState.Playback;
     }
 
-    // Prompt the user for recording overwrite
-    public bool PromptOverwrite() {
-        if(this._lastRecording == null) return true;
-        return EditorUtility.DisplayDialog("Overwrite recording", "This action will overwrite the existing recording. Would you like to continue?", "Yes", "No");
+    // Prompt the user for confirmation
+    public bool PromptConfirmation(string title, string text, bool hasCancel) {
+        return EditorUtility.DisplayDialog(title, text, "Ok", hasCancel ? "Cancel" : "");
     }
 
     // Return true if the current state is recording
@@ -121,8 +135,7 @@ public class Recorder : MonoBehaviour {
     public void StartRecording() {
         // Only perform if in standby state
         if(this._state == RecorderState.Standby) {
-            
-            if(PromptOverwrite()) {
+            if(this._lastRecording == null || PromptConfirmation("Overwrite Confirmation", "Would you like to overwrite the existing recording?", true)) {
                 _timeRelativeStart = Time.time;
                 this._lastRecording = null;
                 this._currentRecording = new Recording();
@@ -208,23 +221,63 @@ public class Recorder : MonoBehaviour {
     // Save recording to file
     public void SaveRecording() {
         // Only perform if in standby state
-        // if(this._state == RecorderState.Standby && this._lastRecording != null) {
-        //     string path = EditorUtility.SaveFilePanel("Save Recording", "", "recording.fasa", "fasa");
-        //     if (path.Length != 0) {
-        //         string output = JsonConvert.SerializeObject(this._lastRecording);   
-        //         if (output != null) using (StreamWriter outputFile = new StreamWriter(path)) outputFile.WriteLine(output);
-        //     }
-        // }
-        if(this._state == RecorderState.Standby && this._lastRecording != null) {
+        if(this._state == RecorderState.Standby && this._lastRecording != null && PromptConfirmation("Saving Alert", "This action will add the current recording to your user profile.", true)) {
             StartCoroutine(SavingData());
-
         }
-
     }
 
-    IEnumerator SavingData()
-    {
-        // this._lastRecording.Frames[this._lastRecording.Frames.Count-1].Timestamp.ToString()
+    // Get the list of recordings
+    public void GetRecordingList() {
+        // Only perform if in standby state
+        if(this._state == RecorderState.Standby) {
+            StartCoroutine(LoadingRecordingList());
+        }
+    }
+
+    // Populate the recording list view
+    public void PopulateRecordingListView(List<string> recordingList) {
+        int offset = 0;
+        float fontsize = 20.0f;
+        foreach(string rec in recordingList) {
+            string[] splitStr = rec.Split(',');
+            string id = splitStr[0], name = splitStr[1];
+
+            GameObject recEntry = new GameObject(name.Replace(" ", "-").Replace(":", "-"), typeof(RectTransform));
+            TextMeshProUGUI recEntryText = recEntry.AddComponent<TextMeshProUGUI>();
+            recEntryText.text = "Recording " + name;
+            recEntryText.fontSize = fontsize;
+            recEntry.transform.SetParent(recordingListContent.transform);
+
+            RectTransform entryRectTransform = recEntry.GetComponent<RectTransform>();
+            entryRectTransform.anchorMin = new Vector2(0, 1);
+            entryRectTransform.anchorMax = new Vector2(0, 1);
+            entryRectTransform.pivot = new Vector2(0, 1);
+            entryRectTransform.anchoredPosition = new Vector2(5, -2.5f - fontsize * offset);
+            entryRectTransform.sizeDelta = new Vector2(entryRectTransform.sizeDelta.x * 2, entryRectTransform.sizeDelta.y);
+            offset++;
+            
+            Button button = recEntry.AddComponent<Button>();
+            recEntry.GetComponent<Button>().onClick.AddListener(delegate() { 
+                LoadRecording(id);
+            });
+        }
+
+        RectTransform contentAreaRect = recordingListContent.transform.GetComponent<RectTransform>();
+        contentAreaRect.sizeDelta = new Vector2(contentAreaRect.sizeDelta.x, 2.5f + fontsize * offset);
+    }
+
+    // Load recording from file
+    public void LoadRecording(string recordingId) {
+        // Only perform if in standby state
+        if(this._state == RecorderState.Standby) {
+            StartCoroutine(LoadRecordingData(recordingId));
+        }
+    }
+
+    // - - - - Database co-routines - - - -
+
+    // Save to database
+    IEnumerator SavingData() {
         WWWForm form = new WWWForm();
         form.AddField("startTime",this._lastRecording.startTime.ToString("yyyy-MM-dd HH:mm:ss"));
         form.AddField("duration",this._lastRecording.Frames[this._lastRecording.Frames.Count-1].Timestamp.ToString());
@@ -235,20 +288,38 @@ public class Recorder : MonoBehaviour {
         yield return www;
 
         Debug.Log(www.text);
-
     }
 
-    // Load recording from file
-    public void LoadRecording() {
-        // Only perform if in standby state
-        if(this._state == RecorderState.Standby) {
-            string path = EditorUtility.OpenFilePanel("Open Recording", "", "fasa");
-            if (path.Length != 0) {
-                StreamReader streamReader = new StreamReader(path);
-                string input = streamReader.ReadToEnd();
-                Recording loadedRecording = JsonConvert.DeserializeObject<Recording>(input);
-                if(loadedRecording.Frames.Count > 0 && PromptOverwrite()) this._lastRecording = JsonConvert.DeserializeObject<Recording>(input);
+    // Load list from database
+    IEnumerator LoadingRecordingList() {
+        WWWForm form = new WWWForm();
+        form.AddField("username", UserManager.username);
+        WWW www = new WWW("http://localhost:8888/sqlconnect/getrecordinglist.php", form);
+        yield return www;
+
+        if(www.text != "No recording found") {
+            List<string> list = new List<string>(www.text.Split('.'));
+            list.RemoveAt(list.Count - 1);
+            PopulateRecordingListView(list);
+            if(list.Count > 0) EnableRecordingListView();
+        }
+        else PromptConfirmation("Loading Alert", "Could not find recordings for this user.", false);
+    }
+
+    // Load recording from database
+    IEnumerator LoadRecordingData(string recordingId) {
+        WWWForm form = new WWWForm();
+        form.AddField("recordingId", recordingId);
+        WWW www = new WWW("http://localhost:8888/sqlconnect/getrecordingdata.php", form);
+        yield return www;
+
+        if(www.text != "No recording found") {
+            Recording loadedRecording = JsonConvert.DeserializeObject<Recording>(www.text);
+            if(loadedRecording.Frames.Count > 0 && (this._lastRecording == null || PromptConfirmation("Overwrite Confirmation", "Would you like to overwrite the existing recording?", true))) {
+                this._lastRecording = loadedRecording;
+                DisableRecordingListView();
             }
         }
+        else PromptConfirmation("Loading Alert", "An error has occured.", false);
     }
 }
