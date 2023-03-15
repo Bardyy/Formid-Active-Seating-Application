@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 using TMPro;
 using UnityEngine.SceneManagement;
+
 public class Register : MonoBehaviour
 {
     public TMP_Text emailInputField;
@@ -33,16 +35,18 @@ public class Register : MonoBehaviour
 
         if(www.text == "0")
         {
+            EditorUtility.DisplayDialog("", "User created successfully.", "Ok", "");
             Debug.Log("User created successfully.");
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
 
         if(www.text == "4: Insert user query failed")
         {
+            EditorUtility.DisplayDialog("", "User not created.", "Ok", "");
             Debug.Log("User not created.");
-    
         }
         if(www.text == "User already exists!"){
+            EditorUtility.DisplayDialog("", "User already exists, try another username!", "Ok", "");
             Debug.Log("User already exists, try another username!");
         }
 

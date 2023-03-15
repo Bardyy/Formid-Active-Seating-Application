@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class MainMenu : MonoBehaviour
 {
@@ -31,19 +32,20 @@ public class MainMenu : MonoBehaviour
         yield return www;
         if(www.text == "success")
         {
+            EditorUtility.DisplayDialog("", "User Login Successful.", "Ok", "");
             Debug.Log("User Login Successful.");
             UnityEngine.SceneManagement.SceneManager.LoadScene(2);
         }
 
         if(www.text == "invalid")
         {
+            EditorUtility.DisplayDialog("", "Invalid username or pass.", "Ok", "");
             Debug.Log("Invalid username or pass");
-    
         }
         if(www.text == "No user exists")
         {
+            EditorUtility.DisplayDialog("", "No user exists.", "Ok", "");
             Debug.Log("No user exists");
-    
         }
 
 

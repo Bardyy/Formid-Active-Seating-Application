@@ -34,6 +34,8 @@ public class Recorder : MonoBehaviour {
     private Recording _currentRecording;        // Tape that is being currently recorded
     private Recording _lastRecording;           // Tape that has finished being recorded (Can be played back, saved, or overwritten)
 
+    private bool _showingOptions = false;
+
     // - - - - Properties
     public int PlaybackPosition {
         get { return _playbackPosition; }
@@ -46,6 +48,7 @@ public class Recorder : MonoBehaviour {
         this.recordingSignifierUI.SetActive(false);
         this.playbackSignifierUI.SetActive(false);
         this.recordingListView.SetActive(false);
+        this._showingOptions = false;
     }
 
     // Update is called once per frame
@@ -86,6 +89,48 @@ public class Recorder : MonoBehaviour {
 
     // ------------------------- Helper methods -------------------------
 
+    public void ToggleRecordingOptions() {
+        if(this._showingOptions) HideRecordingOptions();
+        else ShowRecordingOptions();
+    }
+
+    // Show buttons
+    public void ShowRecordingOptions() {
+        float sizeY = loadButton.GetComponent<RectTransform>().sizeDelta.y;
+        Debug.Log(sizeY);
+        int numButtons = 1;
+        if(loadButton.activeSelf) {
+            RectTransform r = loadButton.GetComponent<RectTransform>();
+            r.anchoredPosition = new Vector2(r.anchoredPosition.x, (sizeY / 2.0f) + sizeY * numButtons);
+            numButtons++;
+        }
+        if(saveButton.activeSelf) {
+            RectTransform r = saveButton.GetComponent<RectTransform>();
+            r.anchoredPosition = new Vector2(r.anchoredPosition.x, (sizeY / 2.0f) + sizeY * numButtons);
+            numButtons++;
+        }
+        if(recordButton.activeSelf) {
+            RectTransform r = recordButton.GetComponent<RectTransform>();
+            r.anchoredPosition = new Vector2(r.anchoredPosition.x, (sizeY / 2.0f) + sizeY * numButtons);
+            numButtons++;
+        }
+        if(playButton.activeSelf) {
+            RectTransform r = playButton.GetComponent<RectTransform>();
+            r.anchoredPosition = new Vector2(r.anchoredPosition.x, (sizeY / 2.0f) + sizeY * numButtons);
+            numButtons++;
+        }
+        this._showingOptions = true;
+    }
+    
+    // Hide buttons
+    public void HideRecordingOptions() {
+        RectTransform r = loadButton.GetComponent<RectTransform>(); r.anchoredPosition = new Vector2(r.anchoredPosition.x, -50.0f);
+        r = saveButton.GetComponent<RectTransform>(); r.anchoredPosition = new Vector2(r.anchoredPosition.x, -50.0f);
+        r = recordButton.GetComponent<RectTransform>(); r.anchoredPosition = new Vector2(r.anchoredPosition.x, -50.0f);
+        r = playButton.GetComponent<RectTransform>(); r.anchoredPosition = new Vector2(r.anchoredPosition.x, -50.0f);
+        this._showingOptions = false;
+    }
+
     // Enable recording list view
     public void EnableRecordingListView() {
         this.recordingListView.SetActive(true);
@@ -113,6 +158,7 @@ public class Recorder : MonoBehaviour {
 
     // Toggle Recording
     public void ToggleRecording() {
+        HideRecordingOptions();
         if(this._state == RecorderState.Standby) {
             StartRecording();
         }
@@ -123,6 +169,7 @@ public class Recorder : MonoBehaviour {
 
     // Toggle Playback
     public void TogglePlayback() {
+        HideRecordingOptions();
         if(this._state == RecorderState.Standby) {
             StartPlayback();
         }
@@ -145,7 +192,7 @@ public class Recorder : MonoBehaviour {
 
                 this.recordingSignifierUI.SetActive(true);
                 this.playbackSignifierUI.SetActive(false);
-                this.recordButton.GetComponentInChildren<Text>().text = "Stop";
+                this.recordButton.GetComponentInChildren<TMP_Text>().text = "Stop";
                 this.loadButton.SetActive(false);
                 this.saveButton.SetActive(false);
                 this.playButton.SetActive(false);
@@ -171,8 +218,8 @@ public class Recorder : MonoBehaviour {
 
             this.recordingSignifierUI.SetActive(false);
             this.playbackSignifierUI.SetActive(false);
-            this.recordButton.GetComponentInChildren<Text>().text = "Record";
-            this.playButton.GetComponentInChildren<Text>().text = "Play";
+            this.recordButton.GetComponentInChildren<TMP_Text>().text = "Record";
+            this.playButton.GetComponentInChildren<TMP_Text>().text = "Play";
             this.loadButton.SetActive(true);
             this.saveButton.SetActive(true);
             this.playButton.SetActive(true);
@@ -190,7 +237,7 @@ public class Recorder : MonoBehaviour {
 
             this.recordingSignifierUI.SetActive(false);
             this.playbackSignifierUI.SetActive(true);
-            this.playButton.GetComponentInChildren<Text>().text = "Stop";
+            this.playButton.GetComponentInChildren<TMP_Text>().text = "Stop";
             this.loadButton.SetActive(false);
             this.saveButton.SetActive(false);
             this.recordButton.SetActive(false);
@@ -210,8 +257,8 @@ public class Recorder : MonoBehaviour {
 
             this.recordingSignifierUI.SetActive(false);
             this.playbackSignifierUI.SetActive(false);
-            this.recordButton.GetComponentInChildren<Text>().text = "Record";
-            this.playButton.GetComponentInChildren<Text>().text = "Play";
+            this.recordButton.GetComponentInChildren<TMP_Text>().text = "Record";
+            this.playButton.GetComponentInChildren<TMP_Text>().text = "Play";
             this.loadButton.SetActive(true);
             this.saveButton.SetActive(true);
             this.recordButton.SetActive(true);
@@ -220,6 +267,7 @@ public class Recorder : MonoBehaviour {
 
     // Save recording to file
     public void SaveRecording() {
+        HideRecordingOptions();
         // Only perform if in standby state
         if(this._state == RecorderState.Standby && this._lastRecording != null && PromptConfirmation("Saving Alert", "This action will add the current recording to your user profile.", true)) {
             StartCoroutine(SavingData());
@@ -228,6 +276,7 @@ public class Recorder : MonoBehaviour {
 
     // Get the list of recordings
     public void GetRecordingList() {
+        HideRecordingOptions();
         // Only perform if in standby state
         if(this._state == RecorderState.Standby) {
             StartCoroutine(LoadingRecordingList());
