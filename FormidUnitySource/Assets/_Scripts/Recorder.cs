@@ -374,4 +374,35 @@ public class Recorder : MonoBehaviour {
         }
         else PromptConfirmation("Loading Alert", "An error has occured.", false);
     }
+
+    public void testButton()
+    {
+        if(_lastRecording != null)
+        {
+            GetSummaryOfRecording(_lastRecording);
+        }
+    }
+
+    public void GetSummaryOfRecording(Recording recording)
+    {
+        float [] total = new float[postureControl.Positions.Size];
+
+        float previousTime = 0.0f;
+
+        foreach (var f in recording.Frames)
+        {
+            total[f.Posture] += (f.Timestamp - previousTime);
+            previousTime = f.Timestamp;
+
+
+            // Debug.Log(f.Posture);
+        }
+        foreach (var x in total)
+        {
+            Debug.Log(x);
+        }
+
+
+    }
+
 }
