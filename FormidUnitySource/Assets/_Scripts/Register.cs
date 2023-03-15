@@ -42,6 +42,9 @@ public class Register : MonoBehaviour
             Debug.Log("User not created.");
     
         }
+        if(www.text == "User already exists!"){
+            Debug.Log("User already exists, try another username!");
+        }
 
     }
 

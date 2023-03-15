@@ -17,11 +17,19 @@ $email = $_POST["email"];
 
 $hashed_pass = hash('sha256', $password);
 
+$checkuserquery = "SELECT * FROM USER WHERE username = '" . $username . "';";
+$check = mysqli_query($con, $checkuserquery);
 
-$insertuserquery = "INSERT INTO User (username,pass,firstName,lastName,email) VALUES ( '" . $username . "' , '" . $hashed_pass . "' , '" . $firstname . " ', '" . $lastname . " ', '" . $email . "');";
+if(mysqli_num_rows($check) != 0){
+	echo("User already exists!");
+}else{
+	$insertuserquery = "INSERT INTO User (username,pass,firstName,lastName,email) VALUES ( '" . $username . "' , '" . $hashed_pass . "' , '" . $firstname . " ', '" . $lastname . " ', '" . $email . "');";
 
-mysqli_query($con, $insertuserquery) or die("4: Insert user query failed");
+	mysqli_query($con, $insertuserquery) or die("4: Insert user query failed");
+	
+	echo("0");
+}
 
-echo("0");
+
 
 ?>
