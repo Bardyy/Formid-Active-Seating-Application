@@ -100,7 +100,7 @@ public class Recorder : MonoBehaviour {
 
     // Show buttons
     public void ShowRecordingOptions() {
-        float sizeY = loadButton.GetComponent<RectTransform>().sizeDelta.y;
+        float sizeY = 1.5f * (loadButton.GetComponent<RectTransform>().sizeDelta.y);
         int numButtons = 1;
         if(loadButton.activeSelf) {
             RectTransform r = loadButton.GetComponent<RectTransform>();
@@ -291,6 +291,7 @@ public class Recorder : MonoBehaviour {
         int offset = 0;
         float fontsize = 20.0f;
         foreach(string rec in recordingList) {
+            Debug.Log(rec);
             string[] splitStr = rec.Split(',');
             string id = splitStr[0], name = splitStr[1];
 
@@ -383,25 +384,23 @@ public class Recorder : MonoBehaviour {
         }
     }
 
-    public void GetSummaryOfRecording(Recording recording)
+    public float[] GetTotalsOfRecording(Recording recording)
     {
         float [] total = new float[postureControl.Positions.Size];
-
         float previousTime = 0.0f;
+        
 
         foreach (var f in recording.Frames)
         {
             total[f.Posture] += (f.Timestamp - previousTime);
             previousTime = f.Timestamp;
-
-
-            // Debug.Log(f.Posture);
         }
-        foreach (var x in total)
+        for (int i = 0; i < total.Length; i++)
         {
-            Debug.Log(x);
+            Debug.Log("Position at: " + i + ":" + total[i]);
         }
 
+        return total;
 
     }
 
