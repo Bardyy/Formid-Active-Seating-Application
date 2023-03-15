@@ -48,6 +48,10 @@ public class Recorder : MonoBehaviour {
         this.recordingSignifierUI.SetActive(false);
         this.playbackSignifierUI.SetActive(false);
         this.recordingListView.SetActive(false);
+        if(this._lastRecording == null){
+            this.playButton.SetActive(false);
+            this.saveButton.SetActive(false);
+        }
         this._showingOptions = false;
     }
 
@@ -97,7 +101,6 @@ public class Recorder : MonoBehaviour {
     // Show buttons
     public void ShowRecordingOptions() {
         float sizeY = loadButton.GetComponent<RectTransform>().sizeDelta.y;
-        Debug.Log(sizeY);
         int numButtons = 1;
         if(loadButton.activeSelf) {
             RectTransform r = loadButton.GetComponent<RectTransform>();

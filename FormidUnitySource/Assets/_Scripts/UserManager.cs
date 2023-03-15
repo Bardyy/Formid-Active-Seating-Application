@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
 using TMPro;
 
 public class UserManager : MonoBehaviour
@@ -24,6 +25,10 @@ public class UserManager : MonoBehaviour
     }
 
     public void LogOut(){
+        
+        if(!EditorUtility.DisplayDialog("", "Are you sure you want to Log out?.", "Yes", "No")){
+            return;
+        }
         username = "";
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }

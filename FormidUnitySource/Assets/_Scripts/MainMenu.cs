@@ -32,7 +32,7 @@ public class MainMenu : MonoBehaviour
         yield return www;
         if(www.text == "success")
         {
-            EditorUtility.DisplayDialog("", "User Login Successful.", "Ok", "");
+            // EditorUtility.DisplayDialog("", "User Login Successful.", "Ok", "");
             Debug.Log("User Login Successful.");
             UnityEngine.SceneManagement.SceneManager.LoadScene(2);
         }
