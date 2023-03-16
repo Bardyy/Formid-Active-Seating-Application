@@ -380,7 +380,7 @@ public class Recorder : MonoBehaviour {
     {
         if(_lastRecording != null)
         {
-            GetSummaryOfRecording(_lastRecording);
+            GetTotalsOfRecording(_lastRecording);
         }
     }
 

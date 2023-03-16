@@ -18,7 +18,13 @@ public class Register : MonoBehaviour
 
     public void CallRegister()
     {
-        StartCoroutine(Registering());
+        if(passwordInputField.text.Length < 8){
+            EditorUtility.DisplayDialog("", "Password too short, minimum 8 characters required!", "Ok", "");
+            passwordInputField.text = "";
+        }else{
+            StartCoroutine(Registering());
+        }
+        
     }
 
     IEnumerator Registering()
