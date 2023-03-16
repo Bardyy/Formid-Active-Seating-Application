@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEditor;
 using Newtonsoft.Json;
+using UI.Dates;
 
 public class Recorder : MonoBehaviour {
 
@@ -23,6 +24,8 @@ public class Recorder : MonoBehaviour {
 
     public GameObject recordingListView;
     public GameObject recordingListContent;
+    public GameObject CalendarContainer;
+    public DatePicker_DateRange datePicker;
     
     // - - - - Private variables
     private RecorderState _state;
@@ -44,6 +47,7 @@ public class Recorder : MonoBehaviour {
 
     // Start is called before the first frame update
     void Awake() {
+        CalendarContainer.SetActive(false);
         this._state = RecorderState.Standby;
         this.recordingSignifierUI.SetActive(false);
         this.playbackSignifierUI.SetActive(false);
@@ -96,6 +100,8 @@ public class Recorder : MonoBehaviour {
     public void ToggleRecordingOptions() {
         if(this._showingOptions) HideRecordingOptions();
         else ShowRecordingOptions();
+        if(CalendarContainer.activeSelf == true) CalendarContainer.SetActive(false);
+    
     }
 
     // Show buttons
@@ -378,10 +384,47 @@ public class Recorder : MonoBehaviour {
 
     public void testButton()
     {
-        if(_lastRecording != null)
-        {
-            GetTotalsOfRecording(_lastRecording);
+        if(CalendarContainer.activeSelf == false){
+
+         CalendarContainer.SetActive(true);
+        }else{
+            CalendarContainer.SetActive(false);
         }
+            
+        // string json = datePicker.GetSerializedConfiguration();
+        // Debug.Log(datePicker.FromDate);
+        //  Debug.Log(datePicker.ToDate);
+        // if(_lastRecording != null)
+        // {
+        //     GetTotalsOfRecording(_lastRecording);
+        // }
+    }
+
+
+    public void GetResultsButton()
+    {
+     
+        Debug.Log(datePicker.Ref_DatePicker_To.SelectedDate.ToString());
+        Debug.Log(datePicker.Ref_DatePicker_From.SelectedDate.ToString());
+        StartCoroutine(InsightsData());
+
+    }
+
+    IEnumerator InsightsData()
+    {
+        WWWForm form = new WWWForm();
+        // Convert the SerializableDate objects to formatted date strings
+        // DateTime fromDate = DateTime.ParseExact(datePicker.FromDate.dateString, "yyyy-MM-ddTHH:mm:ss", null);
+        // DateTime toDate = DateTime.ParseExact(datePicker.ToDate.dateString, "yyyy-MM-ddTHH:mm:ss", null);
+
+
+        // Add the date strings as form fields
+        form.AddField("ToDate", datePicker.Ref_DatePicker_To.SelectedDate.ToString().Split(" ")[0] + " 11:59:59");
+        form.AddField("FromDate", datePicker.Ref_DatePicker_From.SelectedDate.ToString().Split(" ")[0] + " 00:00:00");
+        form.AddField("Username", UserManager.username);
+        WWW www = new WWW("http://localhost:8888/sqlconnect/getspecificrecordingdata.php", form);
+        yield return www;
+        Debug.Log(www.text);
     }
 
     public float[] GetTotalsOfRecording(Recording recording)
