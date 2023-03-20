@@ -18,7 +18,12 @@ public class Register : MonoBehaviour
 
     public void CallRegister()
     {
-        if(passwordInputField.text.Length < 8){
+        if (firstNameInputField.text == "" || lastNameInputField.text == "" || emailInputField.text == "" || passwordInputField.text == "" || userNameInputField.text == "")
+        {
+            EditorUtility.DisplayDialog("", "One or more fields are empty, please fill out all fields.", "Ok", "");
+        }
+        else if (passwordInputField.text.Length < 8 && passwordInputField.text.Length > 0)
+        {
             EditorUtility.DisplayDialog("", "Password too short, minimum 8 characters required!", "Ok", "");
             passwordInputField.text = "";
         }else{
@@ -39,7 +44,8 @@ public class Register : MonoBehaviour
         WWW www = new WWW("http://localhost:8888/sqlconnect/register.php", form);
         yield return www;
 
-        if(www.text == "0")
+        
+        if (www.text == "0")
         {
             EditorUtility.DisplayDialog("", "User created successfully.", "Ok", "");
             Debug.Log("User created successfully.");
@@ -55,6 +61,7 @@ public class Register : MonoBehaviour
             EditorUtility.DisplayDialog("", "User already exists, try another username!", "Ok", "");
             Debug.Log("User already exists, try another username!");
         }
+        
         www.Dispose();
     }
 

@@ -39,10 +39,12 @@ public class MainMenu : MonoBehaviour
 
         if(www.text == "invalid")
         {
-            EditorUtility.DisplayDialog("", "Invalid username or pass.", "Ok", "");
-            Debug.Log("Invalid username or pass");
+            EditorUtility.DisplayDialog("", "Invalid username or password.", "Ok", "");
+            passwordInputField.contentType = TMP_InputField.ContentType.Password;
+            passwordInputField.text = "";
+            // Debug.Log("Invalid username or pass");
         }
-        if(www.text == "No user exists")
+        if (www.text == "No user exists")
         {
             EditorUtility.DisplayDialog("", "No user exists.", "Ok", "");
             Debug.Log("No user exists");
