@@ -47,7 +47,7 @@ public class MainMenu : MonoBehaviour
             EditorUtility.DisplayDialog("", "No user exists.", "Ok", "");
             Debug.Log("No user exists");
         }
+        www.Dispose();
 
-
-}
+    }
 }

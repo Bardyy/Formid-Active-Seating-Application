@@ -55,7 +55,7 @@ public class Register : MonoBehaviour
             EditorUtility.DisplayDialog("", "User already exists, try another username!", "Ok", "");
             Debug.Log("User already exists, try another username!");
         }
-
+        www.Dispose();
     }
 
     public void BackButton(){

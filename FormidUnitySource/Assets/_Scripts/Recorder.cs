@@ -25,6 +25,10 @@ public class Recorder : MonoBehaviour {
     public GameObject recordingListView;
     public GameObject recordingListContent;
     public GameObject CalendarContainer;
+    public GameObject InsightsContainer;
+    public TMP_Text SummaryFromInsightsTitle;
+    public GameObject summaryEntryContainer;
+    public GameObject summaryEntryTemplate;
     public DatePicker_DateRange datePicker;
     
     // - - - - Private variables
@@ -48,6 +52,9 @@ public class Recorder : MonoBehaviour {
     // Start is called before the first frame update
     void Awake() {
         CalendarContainer.SetActive(false);
+        InsightsContainer.SetActive(false);
+        summaryEntryContainer.SetActive(false);
+        summaryEntryTemplate.SetActive(false);
         this._state = RecorderState.Standby;
         this.recordingSignifierUI.SetActive(false);
         this.playbackSignifierUI.SetActive(false);
@@ -347,6 +354,8 @@ public class Recorder : MonoBehaviour {
         yield return www;
 
         Debug.Log(www.text);
+
+        www.Dispose();
     }
 
     // Load list from database
@@ -363,6 +372,7 @@ public class Recorder : MonoBehaviour {
             if(list.Count > 0) EnableRecordingListView();
         }
         else PromptConfirmation("Loading Alert", "Could not find recordings for this user.", false);
+        www.Dispose();
     }
 
     // Load recording from database
@@ -373,6 +383,7 @@ public class Recorder : MonoBehaviour {
         yield return www;
 
         if(www.text != "No recording found") {
+            Debug.Log(www.text);
             Recording loadedRecording = JsonConvert.DeserializeObject<Recording>(www.text);
             if(loadedRecording.Frames.Count > 0 && (this._lastRecording == null || PromptConfirmation("Overwrite Confirmation", "Would you like to overwrite the existing recording?", true))) {
                 this._lastRecording = loadedRecording;
@@ -380,6 +391,7 @@ public class Recorder : MonoBehaviour {
             }
         }
         else PromptConfirmation("Loading Alert", "An error has occured.", false);
+        www.Dispose();
     }
 
     public void testButton()
@@ -394,10 +406,10 @@ public class Recorder : MonoBehaviour {
         // string json = datePicker.GetSerializedConfiguration();
         // Debug.Log(datePicker.FromDate);
         //  Debug.Log(datePicker.ToDate);
-        // if(_lastRecording != null)
-        // {
-        //     GetTotalsOfRecording(_lastRecording);
-        // }
+        if(_lastRecording != null)
+        {
+            GetTotalsOfRecording(_lastRecording);
+        }
     }
 
 
@@ -407,7 +419,12 @@ public class Recorder : MonoBehaviour {
         Debug.Log(datePicker.Ref_DatePicker_To.SelectedDate.ToString());
         Debug.Log(datePicker.Ref_DatePicker_From.SelectedDate.ToString());
         StartCoroutine(InsightsData());
+        if(InsightsContainer.activeSelf == false){
 
+         InsightsContainer.SetActive(true);
+        }else{
+            InsightsContainer.SetActive(false);
+        }
     }
 
     IEnumerator InsightsData()
@@ -423,8 +440,62 @@ public class Recorder : MonoBehaviour {
         form.AddField("FromDate", datePicker.Ref_DatePicker_From.SelectedDate.ToString().Split(" ")[0] + " 00:00:00");
         form.AddField("Username", UserManager.username);
         WWW www = new WWW("http://localhost:8888/sqlconnect/getspecificrecordingdata.php", form);
+
         yield return www;
-        Debug.Log(www.text);
+
+        // Draw header
+        string recordingsText = www.text;
+        string[] recordingsTextArray = recordingsText.Split(",.");
+        var months = new Dictionary<string, string>() {
+                    {"01", "Jan"},
+                    {"02", "Feb"},
+                    {"03", "Mar"},
+                    {"04", "Apr"},
+                    {"05", "May"},
+                    {"06", "June"},
+                    {"07", "July"},
+                    {"08", "Aug"},
+                    {"09", "Sep"},
+                    {"10", "Oct"},
+                    {"11", "Nov"},
+                    {"12", "Dec"}
+                };
+        string insightsDateFrom = months[datePicker.Ref_DatePicker_From.SelectedDate.ToString().Split(" ")[0].Split("-")[1]] 
+                                + " " + datePicker.Ref_DatePicker_From.SelectedDate.ToString().Split(" ")[0].Split("-")[2] 
+                                + " " + datePicker.Ref_DatePicker_From.SelectedDate.ToString().Split(" ")[0].Split("-")[0];
+        string insightsDateTo = months[datePicker.Ref_DatePicker_To.SelectedDate.ToString().Split(" ")[0].Split("-")[1]] 
+                                + " " + datePicker.Ref_DatePicker_To.SelectedDate.ToString().Split(" ")[0].Split("-")[2] 
+                                + " " + datePicker.Ref_DatePicker_To.SelectedDate.ToString().Split(" ")[0].Split("-")[0];
+        SummaryFromInsightsTitle.text = "Summary for " + insightsDateFrom + " to " + insightsDateTo;
+        float templateHeight = 20f;
+        int z = 0;
+        // Clean up table before each render
+        foreach (Transform child in summaryEntryContainer.transform) { 
+            if (z > 0){
+                Destroy(child.gameObject); 
+            } 
+            z++;
+        }
+        // Populate table
+        for (int i = 0; i < recordingsTextArray.Length; i++) {
+            string recording = recordingsTextArray[i];
+            if (recording.Length > 0) {
+                Recording parsedRecording = JsonConvert.DeserializeObject<Recording>(recording);
+                float[] recordingsTotal = GetTotalsOfRecording(parsedRecording);
+                Transform entryTransform = Instantiate(summaryEntryTemplate.transform, summaryEntryContainer.transform);
+                RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
+                entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * i);
+                entryTransform.gameObject.SetActive(true);
+
+                entryTransform.Find("Date").GetComponent<Text>().text = GetRecordingDate(parsedRecording);
+
+                for (int j = 0; j < recordingsTotal.Length; j++) {
+                    entryTransform.Find("Pos" + (j + 1).ToString()).GetComponent<Text>().text = (MathF.Round(recordingsTotal[j],2)).ToString() + " s";
+                }
+            }
+        }
+        summaryEntryContainer.SetActive(true);
+        www.Dispose();
     }
 
     public float[] GetTotalsOfRecording(Recording recording)
@@ -438,13 +509,17 @@ public class Recorder : MonoBehaviour {
             total[f.Posture] += (f.Timestamp - previousTime);
             previousTime = f.Timestamp;
         }
+
+        string result = "For this recording, the stats are ";
         for (int i = 0; i < total.Length; i++)
         {
-            Debug.Log("Position at: " + i + ":" + total[i]);
+            result += "Position at: " + i + ":" + total[i] + " ";
         }
-
+        
         return total;
-
     }
 
+    public string GetRecordingDate(Recording recording) {
+        return recording.startTime.ToString().Split(" ")[0];
+    }
 }
