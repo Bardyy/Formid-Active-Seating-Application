@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -29,7 +30,10 @@ public class Recorder : MonoBehaviour {
     public TMP_Text SummaryFromInsightsTitle;
     public GameObject summaryEntryContainer;
     public GameObject summaryEntryTemplate;
+    public GameObject statisticEntryContainer;
+    public GameObject statisticEntryTemplate;
     public DatePicker_DateRange datePicker;
+    public Image[] imagesPieChart;
     
     // - - - - Private variables
     private RecorderState _state;
@@ -37,7 +41,6 @@ public class Recorder : MonoBehaviour {
     private int _playbackPosition = -1;         // Used for replaying positions
     private float _timeRelativeStart = 0.0f;    // Used for recording and replaying timestamps
     private int _playbackIndex = 0;             // Index in list of frames for playback
-
     private Recording _currentRecording;        // Tape that is being currently recorded
     private Recording _lastRecording;           // Tape that has finished being recorded (Can be played back, saved, or overwritten)
 
@@ -55,6 +58,8 @@ public class Recorder : MonoBehaviour {
         InsightsContainer.SetActive(false);
         summaryEntryContainer.SetActive(false);
         summaryEntryTemplate.SetActive(false);
+        statisticEntryContainer.SetActive(false);
+        statisticEntryTemplate.SetActive(false);
         this._state = RecorderState.Standby;
         this.recordingSignifierUI.SetActive(false);
         this.playbackSignifierUI.SetActive(false);
@@ -476,6 +481,11 @@ public class Recorder : MonoBehaviour {
             } 
             z++;
         }
+
+        float[] overallRecordingsTotal = new float[postureControl.Positions.Size];
+        string[] recordingStats = {"Avg(s)", "Dist(%)"};
+        Debug.Log(overallRecordingsTotal[0]);
+
         // Populate table
         for (int i = 0; i < recordingsTextArray.Length; i++) {
             string recording = recordingsTextArray[i];
@@ -491,10 +501,36 @@ public class Recorder : MonoBehaviour {
 
                 for (int j = 0; j < recordingsTotal.Length; j++) {
                     entryTransform.Find("Pos" + (j + 1).ToString()).GetComponent<Text>().text = (MathF.Round(recordingsTotal[j],2)).ToString() + " s";
+                    overallRecordingsTotal[j] += recordingsTotal[j];
                 }
             }
         }
+        for (int i = 0; i < overallRecordingsTotal.Length - 1; i++) {
+            overallRecordingsTotal[i] = overallRecordingsTotal[i] / recordingsTextArray.Length;
+        }
+        for (int i = 0; i < recordingStats.Length; i++) {
+            string statistic = recordingStats[i];
+            Transform entryTransform = Instantiate(statisticEntryTemplate.transform, statisticEntryContainer.transform);
+            RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
+            entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * (i + 1));
+            entryTransform.gameObject.SetActive(true);
+            
+            entryTransform.Find("Stat").GetComponent<Text>().text = statistic;
+
+            if (statistic == "Avg(s)") {
+                for (int j = 0; j < postureControl.Positions.Size; j++) {
+                    entryTransform.Find("Pos" + (j + 1).ToString()).GetComponent<Text>().text = (MathF.Round(overallRecordingsTotal[j],2)).ToString();
+                }
+            }
+            else if (statistic == "Dist(%)") {
+                for (int j = 0; j < postureControl.Positions.Size; j++) {
+                    entryTransform.Find("Pos" + (j + 1).ToString()).GetComponent<Text>().text = (MathF.Round((overallRecordingsTotal[j] / overallRecordingsTotal.Sum()) * 100,2)).ToString();
+                }
+            }
+        }
+        SetPieChartValues(overallRecordingsTotal);
         summaryEntryContainer.SetActive(true);
+        statisticEntryContainer.SetActive(true);
         www.Dispose();
     }
 
@@ -521,5 +557,24 @@ public class Recorder : MonoBehaviour {
 
     public string GetRecordingDate(Recording recording) {
         return recording.startTime.ToString().Split(" ")[0];
+    }
+
+    public void SetPieChartValues(float[] valuesToSet) 
+    {
+        float totalValues = 0;
+        for (int i = 0; i < imagesPieChart.Length; i++) 
+        {
+            totalValues += FindPercentage(valuesToSet, i);
+            imagesPieChart[i].fillAmount = totalValues;
+        }
+    }
+
+    private float FindPercentage(float[] valuesToSet, int index)
+    {
+        float totalAmount = 0;
+        for (int i = 0; i < valuesToSet.Length; i++) {
+            totalAmount += valuesToSet[i];
+        }
+        return valuesToSet[index] / totalAmount;
     }
 }
