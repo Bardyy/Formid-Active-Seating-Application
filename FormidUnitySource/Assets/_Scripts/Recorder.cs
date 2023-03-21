@@ -505,7 +505,7 @@ public class Recorder : MonoBehaviour {
                 }
             }
         }
-        for (int i = 0; i < overallRecordingsTotal.Length - 1; i++) {
+        for (int i = 0; i < overallRecordingsTotal.Length; i++) {
             overallRecordingsTotal[i] = overallRecordingsTotal[i] / (recordingsTextArray.Length - 1);
         }
         for (int i = 0; i < recordingStats.Length; i++) {
