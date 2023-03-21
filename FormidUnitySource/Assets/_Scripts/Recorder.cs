@@ -506,13 +506,13 @@ public class Recorder : MonoBehaviour {
             }
         }
         for (int i = 0; i < overallRecordingsTotal.Length - 1; i++) {
-            overallRecordingsTotal[i] = overallRecordingsTotal[i] / recordingsTextArray.Length;
+            overallRecordingsTotal[i] = overallRecordingsTotal[i] / (recordingsTextArray.Length - 1);
         }
         for (int i = 0; i < recordingStats.Length; i++) {
             string statistic = recordingStats[i];
             Transform entryTransform = Instantiate(statisticEntryTemplate.transform, statisticEntryContainer.transform);
             RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
-            entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * (i + 1));
+            entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * i);
             entryTransform.gameObject.SetActive(true);
             
             entryTransform.Find("Stat").GetComponent<Text>().text = statistic;
