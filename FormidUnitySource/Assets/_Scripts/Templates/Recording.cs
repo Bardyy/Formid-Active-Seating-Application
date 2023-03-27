@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class Recording {
     
@@ -32,9 +33,16 @@ public class Recording {
 
     // List of all frames in the recording
     public List<Frame> Frames { get; set; }
+    public DateTime startTime;
 
     public Recording() {
         this.Frames = new List<Frame>();
+        startTime = DateTime.Now; 
+    }
+
+    public Recording(string datetime) {
+        this.Frames = new List<Frame>();
+        startTime = DateTime.Parse(datetime); 
     }
 
     // Add a frame to recording
