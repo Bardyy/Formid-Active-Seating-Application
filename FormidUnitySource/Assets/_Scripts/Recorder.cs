@@ -399,6 +399,7 @@ public class Recorder : MonoBehaviour {
         www.Dispose();
     }
 
+    // 
     public void testButton()
     {
         if(CalendarContainer.activeSelf == false){
@@ -420,12 +421,18 @@ public class Recorder : MonoBehaviour {
 
     public void GetResultsButton()
     {
-     
+        if(datePicker.Ref_DatePicker_From.SelectedDate.ToString() == null) {
+            EditorUtility.DisplayDialog("", "Please select a valid start date!", "Ok", "");
+            return;
+        }
+        if(datePicker.Ref_DatePicker_To.SelectedDate.ToString() == null) {
+            EditorUtility.DisplayDialog("", "Please select a valid end date!", "Ok", "");
+            return;
+        }
         Debug.Log(datePicker.Ref_DatePicker_To.SelectedDate.ToString());
         Debug.Log(datePicker.Ref_DatePicker_From.SelectedDate.ToString());
         StartCoroutine(InsightsData());
         if(InsightsContainer.activeSelf == false){
-
          InsightsContainer.SetActive(true);
         }else{
             InsightsContainer.SetActive(false);
