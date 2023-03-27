@@ -19,18 +19,18 @@ $insertuserquery = " SELECT username, pass FROM User WHERE username = '" . $user
 $check = mysqli_query($con, $insertuserquery);
 
 if (mysqli_num_rows($check) != 1){
-
     echo("No user exists");
 }
+else {
+    $userinfo = mysqli_fetch_assoc($check);
+    $enteredPass = $userinfo["pass"];
 
-$userinfo = mysqli_fetch_assoc($check);
-$enteredPass = $userinfo["pass"];
 
-
-if($enteredPass != $hashed_pass){
-    echo("invalid");
-}else{
-    echo("success");
+    if($enteredPass != $hashed_pass){
+        echo("invalid");
+    }else{
+        echo("success");
+    }
 }
 
  ?>
