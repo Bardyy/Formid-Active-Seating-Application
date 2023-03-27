@@ -16,12 +16,31 @@ public class Register : MonoBehaviour
 
     public Button RegisterSubmitButton;
 
+    // Ensure that an email address is valid
+    bool IsValidEmail(string email) {
+        try {
+            var addr = new System.Net.Mail.MailAddress(email);
+            return addr.Address == email;
+        }
+        catch {
+            return false;
+        }
+    }
+
     public void CallRegister()
     {
-        if(passwordInputField.text.Length < 8){
+        if(passwordInputField.text.Length < 8) {
             EditorUtility.DisplayDialog("", "Password too short, minimum 8 characters required!", "Ok", "");
+            passwordInputField.contentType = TMP_InputField.ContentType.Password;
             passwordInputField.text = "";
-        }else{
+        }
+        else if(!IsValidEmail(emailInputField.text)){
+            EditorUtility.DisplayDialog("", "Invalid email format!", "Ok", "");
+            passwordInputField.contentType = TMP_InputField.ContentType.Password;
+            passwordInputField.text = "";
+            emailInputField.text = "";
+        }
+        else {
             StartCoroutine(Registering());
         }
         
@@ -48,10 +67,14 @@ public class Register : MonoBehaviour
 
         if(www.text == "4: Insert user query failed")
         {
+            passwordInputField.contentType = TMP_InputField.ContentType.Password;
+            passwordInputField.text = "";
             EditorUtility.DisplayDialog("", "User not created.", "Ok", "");
             Debug.Log("User not created.");
         }
         if(www.text == "User already exists!"){
+            passwordInputField.contentType = TMP_InputField.ContentType.Password;
+            passwordInputField.text = "";
             EditorUtility.DisplayDialog("", "User already exists, try another username!", "Ok", "");
             Debug.Log("User already exists, try another username!");
         }

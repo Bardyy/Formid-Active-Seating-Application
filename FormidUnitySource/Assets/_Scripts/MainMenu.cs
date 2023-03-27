@@ -37,15 +37,12 @@ public class MainMenu : MonoBehaviour
             UnityEngine.SceneManagement.SceneManager.LoadScene(2);
         }
 
-        if(www.text == "invalid")
+        if(www.text == "invalid" || www.text == "No user exists")
         {
+            passwordInputField.contentType = TMP_InputField.ContentType.Password;
+            passwordInputField.text = "";
             EditorUtility.DisplayDialog("", "Invalid username or pass.", "Ok", "");
             Debug.Log("Invalid username or pass");
-        }
-        if(www.text == "No user exists")
-        {
-            EditorUtility.DisplayDialog("", "No user exists.", "Ok", "");
-            Debug.Log("No user exists");
         }
         www.Dispose();
 
