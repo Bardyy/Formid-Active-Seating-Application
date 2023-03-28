@@ -25,7 +25,7 @@ if($check && mysqli_num_rows($check) >= 1) {
     
 }
 else {
-    echo($selectrecordingsquery);
+    echo("No Results Found!");
 }
 
 ?>

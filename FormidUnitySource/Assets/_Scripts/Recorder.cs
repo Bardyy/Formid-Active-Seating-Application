@@ -25,6 +25,10 @@ public class Recorder : MonoBehaviour {
 
     public GameObject recordingListView;
     public GameObject recordingListContent;
+    public GameObject NoDataPanel;
+    public GameObject InsightsPanel;
+    public GameObject StatisticsPanel;
+    public GameObject PieChartPanel;
     public GameObject CalendarContainer;
     public GameObject InsightsContainer;
     public TMP_Text SummaryFromInsightsTitle;
@@ -60,6 +64,11 @@ public class Recorder : MonoBehaviour {
         summaryEntryTemplate.SetActive(false);
         statisticEntryContainer.SetActive(false);
         statisticEntryTemplate.SetActive(false);
+        InsightsPanel.SetActive(false);
+        StatisticsPanel.SetActive(false);
+        PieChartPanel.SetActive(false);
+        NoDataPanel.SetActive(false);
+
         this._state = RecorderState.Standby;
         this.recordingSignifierUI.SetActive(false);
         this.playbackSignifierUI.SetActive(false);
@@ -309,7 +318,6 @@ public class Recorder : MonoBehaviour {
         int offset = 0;
         float fontsize = 20.0f;
         foreach(string rec in recordingList) {
-            Debug.Log(rec);
             string[] splitStr = rec.Split(',');
             string id = splitStr[0], name = splitStr[1];
 
@@ -405,7 +413,7 @@ public class Recorder : MonoBehaviour {
         if(CalendarContainer.activeSelf == false){
 
          CalendarContainer.SetActive(true);
-        }else{
+        } else{
             CalendarContainer.SetActive(false);
         }
             
@@ -429,13 +437,13 @@ public class Recorder : MonoBehaviour {
             EditorUtility.DisplayDialog("", "Please select a valid end date!", "Ok", "");
             return;
         }
-        Debug.Log(datePicker.Ref_DatePicker_To.SelectedDate.ToString());
-        Debug.Log(datePicker.Ref_DatePicker_From.SelectedDate.ToString());
         StartCoroutine(InsightsData());
-        if(InsightsContainer.activeSelf == false){
-         InsightsContainer.SetActive(true);
-        }else{
-            InsightsContainer.SetActive(false);
+        if (InsightsContainer.activeSelf == false){
+            closeInsights();
+            InsightsContainer.SetActive(true);
+        }
+        else {
+            closeInsights();
         }
     }
 
@@ -457,21 +465,20 @@ public class Recorder : MonoBehaviour {
 
         // Draw header
         string recordingsText = www.text;
-        string[] recordingsTextArray = recordingsText.Split(",.");
         var months = new Dictionary<string, string>() {
-                    {"01", "Jan"},
-                    {"02", "Feb"},
-                    {"03", "Mar"},
-                    {"04", "Apr"},
-                    {"05", "May"},
-                    {"06", "June"},
-                    {"07", "July"},
-                    {"08", "Aug"},
-                    {"09", "Sep"},
-                    {"10", "Oct"},
-                    {"11", "Nov"},
-                    {"12", "Dec"}
-                };
+                        {"01", "Jan"},
+                        {"02", "Feb"},
+                        {"03", "Mar"},
+                        {"04", "Apr"},
+                        {"05", "May"},
+                        {"06", "June"},
+                        {"07", "July"},
+                        {"08", "Aug"},
+                        {"09", "Sep"},
+                        {"10", "Oct"},
+                        {"11", "Nov"},
+                        {"12", "Dec"}
+                    };
         string insightsDateFrom = months[datePicker.Ref_DatePicker_From.SelectedDate.ToString().Split(" ")[0].Split("-")[1]] 
                                 + " " + datePicker.Ref_DatePicker_From.SelectedDate.ToString().Split(" ")[0].Split("-")[2] 
                                 + " " + datePicker.Ref_DatePicker_From.SelectedDate.ToString().Split(" ")[0].Split("-")[0];
@@ -479,65 +486,80 @@ public class Recorder : MonoBehaviour {
                                 + " " + datePicker.Ref_DatePicker_To.SelectedDate.ToString().Split(" ")[0].Split("-")[2] 
                                 + " " + datePicker.Ref_DatePicker_To.SelectedDate.ToString().Split(" ")[0].Split("-")[0];
         SummaryFromInsightsTitle.text = "Summary for " + insightsDateFrom + " to " + insightsDateTo;
-        float templateHeight = 20f;
-        int z = 0;
-        // Clean up table before each render
-        foreach (Transform child in summaryEntryContainer.transform) { 
-            if (z > 0){
-                Destroy(child.gameObject); 
-            } 
-            z++;
-        }
 
-        float[] overallRecordingsTotal = new float[postureControl.Positions.Size];
-        string[] recordingStats = {"Avg(s)", "Dist(%)"};
-        Debug.Log(overallRecordingsTotal[0]);
+        if (recordingsText != "No Results Found!") {
+            NoDataPanel.SetActive(false);
+            InsightsPanel.SetActive(true);
+            StatisticsPanel.SetActive(true);
+            PieChartPanel.SetActive(true);
 
-        // Populate table
-        for (int i = 0; i < recordingsTextArray.Length; i++) {
-            string recording = recordingsTextArray[i];
-            if (recording.Length > 0) {
-                Recording parsedRecording = JsonConvert.DeserializeObject<Recording>(recording);
-                float[] recordingsTotal = GetTotalsOfRecording(parsedRecording);
-                Transform entryTransform = Instantiate(summaryEntryTemplate.transform, summaryEntryContainer.transform);
+            string[] recordingsTextArray = recordingsText.Split(",.");
+            float templateHeight = 20f;
+            int z = 0;
+            // Clean up table before each render
+            foreach (Transform child in summaryEntryContainer.transform) { 
+                if (z > 0){
+                    Destroy(child.gameObject); 
+                } 
+                z++;
+            }
+
+            float[] overallRecordingsTotal = new float[postureControl.Positions.Size];
+            string[] recordingStats = {"Avg(s)", "Dist(%)"};
+
+            // Populate table
+            for (int i = 0; i < recordingsTextArray.Length; i++) {
+                string recording = recordingsTextArray[i];
+                if (recording.Length > 0) {
+                    Recording parsedRecording = JsonConvert.DeserializeObject<Recording>(recording);
+                    float[] recordingsTotal = GetTotalsOfRecording(parsedRecording);
+                    Transform entryTransform = Instantiate(summaryEntryTemplate.transform, summaryEntryContainer.transform);
+                    RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
+                    entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * i);
+                    entryTransform.gameObject.SetActive(true);
+
+                    entryTransform.Find("Date").GetComponent<Text>().text = GetRecordingDate(parsedRecording);
+
+                    for (int j = 0; j < recordingsTotal.Length; j++) {
+                        entryTransform.Find("Pos" + (j + 1).ToString()).GetComponent<Text>().text = (MathF.Round(recordingsTotal[j],2)).ToString() + " s";
+                        overallRecordingsTotal[j] += recordingsTotal[j];
+                    }
+                }
+            }
+            for (int i = 0; i < overallRecordingsTotal.Length; i++) {
+                overallRecordingsTotal[i] = overallRecordingsTotal[i] / (recordingsTextArray.Length - 1);
+            }
+            for (int i = 0; i < recordingStats.Length; i++) {
+                string statistic = recordingStats[i];
+                Transform entryTransform = Instantiate(statisticEntryTemplate.transform, statisticEntryContainer.transform);
                 RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
                 entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * i);
                 entryTransform.gameObject.SetActive(true);
+                
+                entryTransform.Find("Stat").GetComponent<Text>().text = statistic;
 
-                entryTransform.Find("Date").GetComponent<Text>().text = GetRecordingDate(parsedRecording);
-
-                for (int j = 0; j < recordingsTotal.Length; j++) {
-                    entryTransform.Find("Pos" + (j + 1).ToString()).GetComponent<Text>().text = (MathF.Round(recordingsTotal[j],2)).ToString() + " s";
-                    overallRecordingsTotal[j] += recordingsTotal[j];
+                if (statistic == "Avg(s)") {
+                    for (int j = 0; j < postureControl.Positions.Size; j++) {
+                        entryTransform.Find("Pos" + (j + 1).ToString()).GetComponent<Text>().text = (MathF.Round(overallRecordingsTotal[j],2)).ToString();
+                    }
+                }
+                else if (statistic == "Dist(%)") {
+                    for (int j = 0; j < postureControl.Positions.Size; j++) {
+                        entryTransform.Find("Pos" + (j + 1).ToString()).GetComponent<Text>().text = (MathF.Round((overallRecordingsTotal[j] / overallRecordingsTotal.Sum()) * 100,2)).ToString();
+                    }
                 }
             }
+            SetPieChartValues(overallRecordingsTotal);
+            summaryEntryContainer.SetActive(true);
+            statisticEntryContainer.SetActive(true);
         }
-        for (int i = 0; i < overallRecordingsTotal.Length; i++) {
-            overallRecordingsTotal[i] = overallRecordingsTotal[i] / (recordingsTextArray.Length - 1);
+        else {
+            Debug.Log("yes");
+            InsightsPanel.SetActive(false);
+            StatisticsPanel.SetActive(false);
+            PieChartPanel.SetActive(false);
+            NoDataPanel.SetActive(true);
         }
-        for (int i = 0; i < recordingStats.Length; i++) {
-            string statistic = recordingStats[i];
-            Transform entryTransform = Instantiate(statisticEntryTemplate.transform, statisticEntryContainer.transform);
-            RectTransform entryRectTransform = entryTransform.GetComponent<RectTransform>();
-            entryRectTransform.anchoredPosition = new Vector2(0, -templateHeight * i);
-            entryTransform.gameObject.SetActive(true);
-            
-            entryTransform.Find("Stat").GetComponent<Text>().text = statistic;
-
-            if (statistic == "Avg(s)") {
-                for (int j = 0; j < postureControl.Positions.Size; j++) {
-                    entryTransform.Find("Pos" + (j + 1).ToString()).GetComponent<Text>().text = (MathF.Round(overallRecordingsTotal[j],2)).ToString();
-                }
-            }
-            else if (statistic == "Dist(%)") {
-                for (int j = 0; j < postureControl.Positions.Size; j++) {
-                    entryTransform.Find("Pos" + (j + 1).ToString()).GetComponent<Text>().text = (MathF.Round((overallRecordingsTotal[j] / overallRecordingsTotal.Sum()) * 100,2)).ToString();
-                }
-            }
-        }
-        SetPieChartValues(overallRecordingsTotal);
-        summaryEntryContainer.SetActive(true);
-        statisticEntryContainer.SetActive(true);
         www.Dispose();
     }
 
@@ -583,5 +605,9 @@ public class Recorder : MonoBehaviour {
             totalAmount += valuesToSet[i];
         }
         return valuesToSet[index] / totalAmount;
+    }
+
+    public void closeInsights() {
+        InsightsContainer.SetActive(false);
     }
 }
